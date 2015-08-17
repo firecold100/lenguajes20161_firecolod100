@@ -3,7 +3,7 @@ Repositorio creado para la materia de lenguajes de programación.
 
 ##Integrantes:
 
-Abrego Alavarez Jonathan
+Abrego Alvarez Jonathan
 
 Ascencio Espindola Jorge Eduardo
 
