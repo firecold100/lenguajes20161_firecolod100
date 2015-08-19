@@ -7,4 +7,3 @@ Abrego Alvarez Jonathan
 
 Ascencio Espindola Jorge Eduardo
 
-Moreno de la Rosa Alan
