@@ -7,4 +7,4 @@ Abrego Alvarez Jonathan
 
 Ascencio Espindola Jorge Eduardo
 
-Moreno de la Rosa Alan (encargado repositorio) 306802313
+Moreno de la Rosa Alan (encargado repositorio)
