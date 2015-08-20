@@ -1,0 +1,13 @@
+#lang plai
+
+;Ejercicio 1)
+(define (pow x n)
+  (cond
+    [(zero? n) 1]
+    [else (* x (pow x (- n 1)))]))
+
+(test (pow 2 3) 8)
+(test (pow 10 0) 1)
+(test (pow 10 2) 100)
+(test (pow 9 2) 81)
+(test (pow 3 3) 27)
