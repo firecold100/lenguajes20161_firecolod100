@@ -27,7 +27,7 @@
 ;Ejercicio 2)
 (define (average lst)
   (cond
-    [(zero? (sum lst)) 0]
+    [(zero? (sum lst)) (error "¡Requiero una lista no vacia!")]
     [else (/ (sum lst) (mlength lst))]))
 
 (test (average '(5)) 5)
