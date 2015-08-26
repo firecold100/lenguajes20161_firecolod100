@@ -5,6 +5,6 @@ Repositorio creado para la materia de lenguajes de programación.
 
 Abrego Alvarez Jonathan, abrego.fc@gmail.com 308043305
 
-Ascencio Espindola Jorge Eduardo
+Ascencio Espindola Jorge Eduardo, yorche@ciencias.unam.mx  309043511
 
 Moreno de la Rosa Alan (encargado repositorio)
