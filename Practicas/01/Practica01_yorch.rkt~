@@ -18,19 +18,6 @@
 ;(test (mreduce + '(1 2 3 4 5 6 7 8 9 10)) 55)
 
 
-;Ejercicio 6
-(define (mconcat lst1 lst2) 
-  (cond
-    [(empty? lst1) lst2]
-    [else (cons (car lst1) (mconcat (cdr lst1) lst2))]))
-
-;(test (mconcat '() '()) '()) ;The concation of two empty
-;(test (mconcat '() '(1 2 3)) '(1 2 3))
-;(test (mconcat '(1 2 3) '(1)) '(1 2 3 1))
-;(test (mconcat '(4 5 6) '()) '(4 5 6))
-;(test (mconcat '(1 2 3) '(4 5 6)) '(1 2 3 4 5 6))
-
-
 ;Ejercicio 7
 
 (define (mmap func lst)
@@ -64,7 +51,8 @@
 (define (mpowerset lst)
   (cond
     [(empty? lst) '()]
-    [else (list '() lst)]))
+    [else (construye lst lst)]))
 
-;(test (mpowerset '()) '())
-(test (mpowerset '(1)) '(() (1)))
+(define (construye lst1 lst2))
+
+(test (mpowerset '(1 2)) '((1 2) (2) (1) ()))
