@@ -20,6 +20,18 @@
     [(empty? lst) '()]
     [else (cons (func (car lst)) (mmap func (cdr lst)))]))
 
-(test (mmap add1 '(1 2 3 4)) '(2 3 4 5))
-(test (mmap car '((1 2 3) (4 5 6) (7 8 9))) '(1 4 7))
-(test (mmap cdr '((1 2 3) (4 5 6) (7 8 9))) '((2 3) (5 6) (8 9)))
+;(test (mmap add1 '(1 2 3 4)) '(2 3 4 5))
+;(test (mmap car '((1 2 3) (4 5 6) (7 8 9))) '(1 4 7))
+;(test (mmap cdr '((1 2 3) (4 5 6) (7 8 9))) '((2 3) (5 6) (8 9)))
+;(test (mmap car (cdr '((1 2 3) (4 5 6) (7 8 9)))) '(4 7))
+
+(define (myany? pred lst)
+  (cond
+    [(empty? lst) (pred lst)]
+    [(if (pred (car lst)) #t #f)]
+    [else (myany? pred (cdr lst))]))
+
+;(test (myany? number? '()) #f)
+;(test (myany? number? '(a b c d 1)) #t)
+;(test (myany? symbol? '(1 2 3 4)) #f)
+;(test (myany? symbol? '(1 2 + 4)) #t)
