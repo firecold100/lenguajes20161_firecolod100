@@ -1,8 +1,0 @@
-#lang plai
-
-(define (milength a_list)
-  (cond 
-    [(empty? a_list) 0]
-    [else (+ 1 (milength (cdr a_list)))]))
-
-(milength '(2 3 5 3 2 5))
