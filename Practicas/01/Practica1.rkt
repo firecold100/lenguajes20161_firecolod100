@@ -11,6 +11,7 @@
 (test (mconcat '(1 2 3) '(1)) '(1 2 3 1))
 (test (mconcat '(4 5 6) '()) '(4 5 6))
 (test (mconcat '(1 2 3) '(4 5 6)) '(1 2 3 4 5 6))
+(test (mconcat '() '()) '()) ;Testing the base case
 
 ;Function which takes a list 
 ;and give us the last element of it. (list) -> (list)
@@ -37,6 +38,7 @@
 (test (mfilter (lambda (y) (not (eq? "pikachu" y)) ) '("raichu" "ratatta" "charmeleon" ) ) '("raichu" "ratatta" "charmeleon" ))
 (test (mfilter (lambda (u) (< u 5)) '(12 32 1 2 3 5)) '(1 2 3 ))
 (test (mfilter (lambda (h) (eq? #t h)) '(#f #f #t #t #t)) '(#t #t #t))
+(test (mfilter string? '()) '()) ;Testing the base case.
 
 ;Ejercicio 10
 
@@ -54,4 +56,5 @@
 (test (mevery? (lambda (x) (eq? "pikachu" x)) '("pikachu" "raichu") ) #f)
 (test (mevery? number? '(1 2 3 4)) #t)
 (test (mevery? (lambda (x) (empty? x)) '('() '() '())) #f) ;It's false because is not empty the list.
-(test (mevery? string? '("charizar" "squirtle" "haunter" "combee")) #t)
+(test (mevery? string? '("charizard" "squirtle" "haunter" "combee")) #t)
+(test (mevery? (lambda (x) (= (modulo x 3) 1)) '()) #t) ;Testing the base case.
