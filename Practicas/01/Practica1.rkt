@@ -19,3 +19,22 @@
     [(empty? lst) '()]
     [(empty? (cdr lst)) (car lst)]
     [else (getLast (cdr lst))]))
+
+;Ejercicio 8
+
+(define (mfilter predicate lst);We define a function which takes a predicate and a list, the predicate may be a lambda.
+  (cond
+    ;If the list is empty (base case) then we return the empty list
+    [(empty? lst) '()] 
+    ;If the predicate applied to the head of the list is true, then we return the first element of it 
+    ;concatenated with the application to the rest of the list recursively.
+    [(predicate (car lst)) (cons (car lst) (mfilter predicate (cdr lst))) ]
+    ;Else, we return the application of the function of the rest of the list recursively.
+    [else (mfilter predicate (cdr lst)) ]))
+
+(test (mfilter (lambda (x) (not(zero? x))) '(2 0 1 4 0)) '(2 1 4))
+(test (mfilter (lambda (n) (= (modulo n 3) 1)) '(4 7 10 8)) '(4 7 10))
+(test (mfilter (lambda (y) (not (eq? "pikachu" y)) ) '("raichu" "ratatta" "charmeleon" ) ) '("raichu" "ratatta" "charmeleon" ))
+(test (mfilter (lambda (u) (< u 5)) '(12 32 1 2 3 5)) '(1 2 3 ))
+(test (mfilter (lambda (h) (eq? #t h)) '(#f #f #t #t #t)) '(#t #t #t))
+
