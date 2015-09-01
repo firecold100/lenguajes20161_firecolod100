@@ -61,40 +61,18 @@
 
 ;Ejercicio 11
 
-(define (aux lst)
-  (cond
-    [(empty? (cdr lst)) (list lst)]
-    [else (mconcat (list (list (car lst))) (aux (cdr lst)))]))
-
 (define (mpowerset lst)
   (cond
-    [(empty? lst) '(())]
-    [(empty? (cdr lst)) (mconcat '(()) (list lst))]
-    [else (mconcat (mconcat (mconcat '(()) (aux lst)) (const '() (car lst) (cdr lst))) (list lst))]))
+    [(empty? lst) (list '())]
+    [else (agrega (mpowerset (cdr lst)) (car lst))]))
 
-(define (const pas elem pos)
+(define (agrega res elem)
   (cond
-    [(empty? pos) '()]
-    [else (mconcat (mconcat (pares (list elem) pos) (const (mconcat pas (list elem)) (car pos) (cdr pos))) (pares pas pos))]))
+    [(empty? res)  '()]
+    [else (cons (cons elem (first res)) (cons (car res) (agrega (cdr res) elem)))]))
 
-(define (pares elem lst)
-  (cond
-    [(empty? lst) '()]
-    [else (mconcat (list (mconcat elem (list (car lst)))) (pares elem (cdr lst)))]))
-
-;(test (mpowerset '(1)) '(() (1)))
-;(mpowerset '(1 2))
-;(test (mpowerset '(1 2 3)) '(() (1) (2) (3) (1 2) (1 3) (2 3) (1 2 3)))
-;(mpowerset '(1 2 3 4))
-
-(define (subcjtos lst)
-  (cond
-    [(empty? lst) '(())]
-    [else (creacjtos '() (car lst) (cdr lst))]))
-
-(define (creacjtos pas elem pos)
-  (cond
-    [(empty? pos) (mconcat (mconcat (list (list elem)) (list pas)) (list (mconcat pas (list elem))))]
-    [else (mconcat (list (list elem)) (mconcat (pares (list elem) pos) (mconcat (list (mconcat pas pos)) (creacjtos (mconcat pas (list elem)) (car pos) (cdr pos)))))]))
-
-(subcjtos '(1 2 3 4))
+;(test (mpowerset '()) '(()))
+(test (mpowerset '(1)) '((1) ()))
+;(test (mpowerset '(1 2)) '((1 2) (2) (1) ()))
+;(test (mpowerset '(1 2 3)) '((1 2 3) (2 3) (1 3) (3) (1 2) (2) (1) ()))
+;(test (mpowerset '(1 2 3 4)) '((1 2 3 4) (2 3 4) (1 3 4) (3 4) (1 2 4) (2 4) (1 4) (4) (1 2 3) (2 3) (1 3) (3) (1 2) (2) (1) ()))

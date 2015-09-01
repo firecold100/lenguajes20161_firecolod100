@@ -172,3 +172,19 @@
 (test (mevery? (lambda (x) (= (modulo x 3) 1)) '()) #t) ;Testing the base case.
 
 ;Ejercicio 11
+
+(define (mpowerset lst)
+  (cond
+    [(empty? lst) (list '())]
+    [else (agrega (mpowerset (cdr lst)) (car lst))]))
+
+(define (agrega res elem)
+  (cond
+    [(empty? res)  '()]
+    [else (cons (cons elem (first res)) (cons (car res) (agrega (cdr res) elem)))]))
+
+;(test (mpowerset '()) '(()))
+;(test (mpowerset '(1)) '((1) ()))
+;(test (mpowerset '(1 2)) '((1 2) (2) (1) ()))
+;(test (mpowerset '(1 2 3)) '((1 2 3) (2 3) (1 3) (3) (1 2) (2) (1) ()))
+;(test (mpowerset '(1 2 3 4)) '((1 2 3 4) (2 3 4) (1 3 4) (3 4) (1 2 4) (2 4) (1 4) (4) (1 2 3) (2 3) (1 3) (3) (1 2) (2) (1) ()))
