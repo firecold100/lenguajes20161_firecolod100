@@ -19,6 +19,30 @@
     [(empty? (cdr lst)) (car lst)]
     [else (getLast (cdr lst))]))
 
+;Auxiliary function of the auxiliary function.
+(define (mprimeaux n m)
+  (cond
+    [(= m 1) #t]
+    [(= n m) (mprimeaux n (- m 1))]
+    [(= (modulo n m) 0) #f]
+    [else (mprimeaux n (- m 1))]))
+    
+
+;Auxiliary function
+;returns if the given number is a prime or is not.
+(define (mprime? n)
+  (cond
+    [(< n 2) #f]
+    [else (mprimeaux n n)]
+  ))
+
+(define (loop i n)
+   (if (= n  i) ;condicion
+      '()  ; then
+      (if(and (mprime? i) #t) ;elseif
+         (cons i (loop (+ i 1) n))
+      (loop (+ i 1) n)))) ;then
+
 ;Ejercicio 1)
 (define (pow x n)
   (cond
@@ -44,6 +68,8 @@
 (test (average '(0))0)
 
 ;Ejercicio 3)
+(define (primes n)
+  (loop 1 n))
 
 ;Ejercicio 4)
 (define (zip lst1 lst2)
