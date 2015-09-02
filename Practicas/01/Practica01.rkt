@@ -58,11 +58,11 @@
 ;Ejercicio 2)
 (define (average lst)
   (cond
-    [(zero? (sum lst)) (error "¡Requiero una lista no vacia o que la suma de los numeros sea mayor que cero!")]
+    [(zero? (sum lst)) 0]
     [else (/ (sum lst) (mlength lst))]))
 
 (test (average '())0)
-(test (average '(5)) 5)
+(test (average '(0 0 0 0)) 0)
 (test (average '(3 2 6 2 1 7 2 1)) 3)
 (test (average '(10 7 13)) 10)
 (test (average '(1 1 1 1 1)) 1)
