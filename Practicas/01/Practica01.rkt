@@ -53,7 +53,7 @@
 (test (pow 10 0) 1)
 (test (pow 10 2) 100)
 (test (pow 9 2) 81)
-(test (pow 8 6) 27)
+(test (pow 1 6) 1)
 
 ;Ejercicio 2)
 (define (average lst)
@@ -61,21 +61,33 @@
     [(zero? (sum lst)) (error "¡Requiero una lista no vacia o que la suma de los numeros sea mayor que cero!")]
     [else (/ (sum lst) (mlength lst))]))
 
+(test (average '())0)
 (test (average '(5)) 5)
 (test (average '(3 2 6 2 1 7 2 1)) 3)
 (test (average '(10 7 13)) 10)
-(test (average '(1 1 1 1 1)) 2)
-(test (average '(0))0)
+(test (average '(1 1 1 1 1)) 1)
 
 ;Ejercicio 3)
 (define (primes n)
-  (loop 1 n))
+  (loop 1 (+ n 1)))
+
+(test (primes 1) '())
+(test (primes 9) '(2 3 5 7))
+(test (primes 11) '(2 3 5 7 11))
+(test (primes 13) '(2 3 5 7 11 13))
+(test (primes 30) '(2 3 5 7 11 13 17 19 23 29))
 
 ;Ejercicio 4)
 (define (zip lst1 lst2)
   (if (or (null? lst1) (null? lst2))empty
   [cons (list (car lst1) (car lst2))
         (zip (cdr lst1) (cdr lst2))]))
+
+(test (zip '() '())'())
+(test (zip '(1 2) '())'())
+(test (zip '(3 5) '(4 5)) '((3 4)(5 5)))
+(test (zip '(3 4 5 6) '(1 2 3))'((3 1)(4 2)(5 3)))
+(test (zip '(1) '(10))'((1 10)))
 
 ;Ejercicio 5
 (define (msum lst)
