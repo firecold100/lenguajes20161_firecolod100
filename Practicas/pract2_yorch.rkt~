@@ -1,0 +1,9 @@
+#lang plai
+
+
+(define-type NTree
+  [TLEmpty]
+  (NodeN (val number?) (sons list?)))
+
+
+( NTree? (NodeN 1 '(1 2)))
