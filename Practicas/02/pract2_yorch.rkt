@@ -63,3 +63,19 @@
 
 (define ar (MArray 5 '(0 0 0 0 0)))
 (setvalueA ar 2 4)
+
+(define ar (MArray 5 '(0 0 0 0 0)))
+(setvalueA ar 2 4)
+
+;Function MArray2MList.
+;Given an array of type MArray, returns a list of type MList such that contains every element of the original array.
+; (MArray) -> (MList)
+(define (MArray2MList arr)
+  
+  )
+
+#|(test (MArray2MList (Marray 0 '())) (MEmpty)); Base case
+(test (MArray2MList (Marray 5 '("a" "b")))
+      (MCons "a" (MCons "b" (MEmpty))))
+(test (MArray2MList (Marray 5 '(1 2 3)))
+      (MCons 1 (MCons 2 (MCons 3 (MEmpty)))));|#
