@@ -65,8 +65,7 @@
 
 ;10 lengthML - Dada una lista de tipo MLista, regresar la cantidad de elementos que tiene
 (define (lengthML lst)
-  (cond
-    [(MEmpty? lst) 0]
-    [else (+ 1 (lengthML (MCons-next lst)))]))
+    (MEmpty? lst) 0)
+
 
   
