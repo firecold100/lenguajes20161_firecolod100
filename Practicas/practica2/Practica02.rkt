@@ -63,6 +63,10 @@
 ;(define ar (MArray 5 '(0 0 0 0 0)))
 ;(setvalueA ar 2 5)
 
+;; Ejercicio 7 MArray2MList
+
+;; Ejercicio 8 printML
+
 ;Ejercicio 9
 (define (concatML lst1 lst2)
   (cond
@@ -75,6 +79,10 @@
   (cond
     [(MEmpty? lst) 0]
     [else (+ 1 (lengthML (MCons-next lst)))]))
+
+;; Ejercicio 11 mapML
+
+;; Ejercicio 12 filterML
 
 ;; Definamos los siguientes tipos de datos y valores
 (define-type Coordinates
@@ -95,6 +103,13 @@
 (define zocalo (building "Zocalo" gps-zocalo))
 (define plaza-perisur (building "Plaza Perisur" gps-perisur))
 
+;; Ejercicio 13 haversine
+
+;; Ejercicio 14 gps-coordinates
+
+;; Ejercicio 15 closest-building
+
+;; Ejercicio 16 buildings-at-distance
 
 ;; Ejercicio 17
 (define (area x)
@@ -102,3 +117,5 @@
     [(Circle? x) (* pi (* (Circle-radio x) (Circle-radio x)))] ;pi * r^2
     [(Square? x) (* (Square-len x) (Square-len x))] ;cara * cara
     [(Rectangle? x)(*(Rectangle-leng x)(Rectangle-height x))]));base*altura
+
+;; Ejercicio in-figure?
