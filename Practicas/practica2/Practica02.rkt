@@ -94,4 +94,11 @@
 (define ciencias (building "Facultad de Ciencias" gps-ciencias))
 (define zocalo (building "Zocalo" gps-zocalo))
 (define plaza-perisur (building "Plaza Perisur" gps-perisur))
-(define plazas (MCons plaza-satelite (MCons plaza-perisur (MEmpty))))
+
+
+;; Ejercicio 17
+(define (area x)
+  (cond 
+    [(Circle? x) (* pi (* (Circle-radio x) (Circle-radio x)))]))
+        
+     
