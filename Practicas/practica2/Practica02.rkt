@@ -85,7 +85,9 @@
     [else (+ 1 (lengthML (MCons-next lst)))]))
 
 ;; Ejercicio 11 mapML
-
+(define (mapML fun lst)
+  [MCons (fun [MCons-value lst]) (mapML fun (MCons-next lst)))])  
+     
 ;; Ejercicio 12 filterML
 
 ;; Definamos los siguientes tipos de datos y valores
