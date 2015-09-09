@@ -8,7 +8,7 @@
 ;Ejercicio 2
 (define-type MList
   [MEmpty]
-  [MCons (value number?) (next MList?)])
+  [MCons (value or/c) (next MList?)])
 
 ;(test (MEmpty) (MEmpty))
 ;(test (MList? (MEmpty)) #t)
@@ -66,10 +66,29 @@
 ;; Ejercicio 7 MArray2MList
 ;Dado un arreglo de tipo MArray, regresar una lista de tipo MList que contenga todos los
 ;elementos del arreglo original
+(define (MArray2MList array)
+  (cond
+    [(empty? (MArray-elements array)) (MEmpty)]
+    [else (MCons (car (MArray-elements array)) (MArray2MList (MArray (- (MArray-leng array) 1) (cdr (MArray-elements array)))))]))
 
+;(define array1 (MArray 0 '()))
+;(test (MArray2MList array1) (MEmpty))
+;(test (MArray2MList (MArray 5 '("a" "b"))) (MCons "a" (MCons "b" (MEmpty))))
   
   
-;; Ejercicio 8 printML
+; Ejercicio 8 printML
+(define (printML lst)
+  (cond
+    [(MEmpty? lst) "[]"]
+    [(MList? lst) (string-append "[" (saca lst))]))
+
+(define (saca lst)
+  (cond
+    [(MEmpty? (MCons-next lst)) (string-append (~a (MCons-value lst)) "]")]
+    [else (string-append (~a (MCons-value lst)) ", " (saca (MCons-next lst)))]))
+(printML (MEmpty))
+(printML (MCons 7 (MEmpty)))
+(printML (MCons 7 (MCons 4 (MEmpty))))
 
 ;Ejercicio 9
 (define (concatML lst1 lst2)
@@ -82,7 +101,11 @@
 (define (lengthML lst)
   (cond
     [(MEmpty? lst) 0]
-    [else (+ 1 (lengthML (MCons-next lst)))]))
+    [(MList? lst) (+ 1 (lengthML (MCons-next lst)))]
+    [else (error "No es del tipo MList")]))
+
+;(lengthML (MEmpty))
+;(lengthML (MCons 7 (MCons 4 (MEmpty))))
 
 ;; Ejercicio 11 mapML
 
