@@ -99,6 +99,6 @@
 ;; Ejercicio 17
 (define (area x)
   (cond 
-    [(Circle? x) (* pi (* (Circle-radio x) (Circle-radio x)))] ;pi * r^2
-    [(Square? x) (* (Square-len x) (Square-len x))] ;cara * cara
-    [(Rectangle? x)(*(Rectangle-leng x)(Rectangle-height x))]));base*altura
+    [(Circle? x) (* pi (* (Circle-radio x) (Circle-radio x)))]))
+        
+     
