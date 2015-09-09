@@ -138,7 +138,7 @@
 
 ;; Ejercicio 13 haversine
 
-;; Ejercicio 14 gps-coordinates
+;; Ejercicio 14
 (define (gps-coordinates lst)
   (cond 
     [(MEmpty? lst)(MEmpty)]
@@ -147,6 +147,10 @@
 ;; Ejercicio 15 closest-building
 
 ;; Ejercicio 16 buildings-at-distance
+
+(define (buildings-at-distance b lst d)
+  (cond
+    [(MEmpty? lst) (MEmpty)]))
 
 ;; Ejercicio 17
 (define (area x)
