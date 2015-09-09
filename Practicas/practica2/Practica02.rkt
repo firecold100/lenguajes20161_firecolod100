@@ -134,9 +134,15 @@
 (define zocalo (building "Zocalo" gps-zocalo))
 (define plaza-perisur (building "Plaza Perisur" gps-perisur))
 
+(define plazas (MCons plaza-satelite (MCons plaza-perisur (MEmpty))))
+
 ;; Ejercicio 13 haversine
 
 ;; Ejercicio 14 gps-coordinates
+(define (gps-coordinates lst)
+  (cond 
+    [(MEmpty? lst)(MEmpty)]
+    [else[MCons (building-loc(MCons-value lst))(gps-coordinates (MCons-next lst))]]))
 
 ;; Ejercicio 15 closest-building
 
