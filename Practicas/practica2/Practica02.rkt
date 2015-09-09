@@ -61,7 +61,7 @@
     [(= count position) (cons value (cdr array))]))
 
 (define ar (MArray 5 '(0 0 0 0 0)))
-(setvalueA ar 2 5)
+;(setvalueA ar 2 5)
 
 ;; Ejercicio 7 MArray2MList
 ;Dado un arreglo de tipo MArray, regresar una lista de tipo MList que contenga todos los
@@ -86,9 +86,10 @@
   (cond
     [(MEmpty? (MCons-next lst)) (string-append (~a (MCons-value lst)) "]")]
     [else (string-append (~a (MCons-value lst)) ", " (saca (MCons-next lst)))]))
-(printML (MEmpty))
-(printML (MCons 7 (MEmpty)))
-(printML (MCons 7 (MCons 4 (MEmpty))))
+
+;(printML (MEmpty))
+;(printML (MCons 7 (MEmpty)))
+;(printML (MCons 7 (MCons 4 (MEmpty))))
 
 ;Ejercicio 9
 (define (concatML lst1 lst2)
@@ -155,4 +156,19 @@
     [(Square? x) (* (Square-len x) (Square-len x))] ;cara * cara
     [(Rectangle? x)(*(Rectangle-leng x)(Rectangle-height x))]));base*altura
 
-;; Ejercicio 18 in-figure?
+; Ejercicio 18 in-figure?
+(define (distancia punto1 punto2)
+    (sqrt (+ (expt (- (2D-Point-x punto2) (2D-Point-x punto1)) 2) (expt (- (2D-Point-y punto2) (2D-Point-y punto1)) 2))))
+
+(define (in-figure? figura punto)
+  (cond
+    [(Square? figura) (and (esta-x (Square-point figura) (Square-len figura) punto) (esta-y (Square-point figura) (Square-len figura) punto))]
+    [(Circle? figura) (< (distancia (Circle-point figura) punto) (Circle-radio figura))]))
+
+(define (esta-x punto1 distancia punto2)
+  (and (>= (+ (2D-Point-x punto1) distancia) (2D-Point-x punto2)) (<= (2D-Point-x punto1) (2D-Point-x punto2))))
+(define (esta-y punto1 distancia punto2)
+  (and (<= (- (2D-Point-y punto1) distancia) (2D-Point-y punto2)) (>= (2D-Point-y punto1) (2D-Point-y punto2))))
+
+;(in-figure? (Circle (2D-Point 0 0) 3) (2D-Point 4 0))
+(in-figure? (Square (2D-Point 2 2) 4) (2D-Point 1 1))
