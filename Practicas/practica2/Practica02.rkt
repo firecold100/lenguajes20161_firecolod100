@@ -138,7 +138,11 @@
 (define plazas (MCons plaza-satelite (MCons plaza-perisur (MEmpty))))
 
 ;; Ejercicio 13 haversine
-
+;; Ejercicio 13 haversine
+#|(define (haversine gps1 gps2)
+  (cases
+     [(not (GPS? gps1)) error "The first param is not of type GPS" ]
+     [(not (GPS? gps2)) error "The second param is not of type GPS" ]))|#
 ;; Ejercicio 14
 (define (gps-coordinates lst)
   (cond 
