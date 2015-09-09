@@ -63,7 +63,14 @@
 ;(define ar (MArray 5 '(0 0 0 0 0)))
 ;(setvalueA ar 2 5)
 
-;10 lengthML - Dada una lista de tipo MLista, regresar la cantidad de elementos que tiene
+;Ejercicio 9
+(define (concatML lst1 lst2)
+  (cond
+    [(MEmpty? lst1) lst2]
+    [(MEmpty? lst2) lst1]
+    [else (MCons (MCons-value lst1) (concatML (MCons-next lst1) lst2))]))
+
+;Ejercicio 10
 (define (lengthML lst)
   (cond
     [(MEmpty? lst) 0]
