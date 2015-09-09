@@ -8,7 +8,7 @@
 ;Ejercicio 2
 (define-type MList
   [MEmpty]
-  [MCons (value or/c) (next MList?)])
+  [MCons (value any/c) (next MList?)])
 
 ;(test (MEmpty) (MEmpty))
 ;(test (MList? (MEmpty)) #t)
@@ -109,7 +109,9 @@
 
 ;; Ejercicio 11 mapML
 (define (mapML fun lst)
-  [MCons (fun [MCons-value lst]) (mapML fun (MCons-next lst)))])  
+  (cond 
+    [(MEmpty? lst) (MEmpty)]
+    [else[MCons (fun [MCons-value lst]) (mapML fun (MCons-next lst))]]))  
      
 ;; Ejercicio 12 filterML
 
