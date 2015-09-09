@@ -2,7 +2,7 @@
 
 ;Ejercicio 1
 (define-type Array
-  [MArray (leng number?) (elements list?)])
+  [MArray (leng number?) (elements (listof number?))])
 ;(test (Array? (MArray 4 '(1 2 3))) #t)
 
 ;Ejercicio 2
@@ -60,15 +60,11 @@
     [(> count position) empty]
     [(= count position) (cons value (cdr array))]))
 
-(define ar (MArray 5 '(0 0 0 0 0)))
-(setvalueA ar 2 5)
+;(define ar (MArray 5 '(0 0 0 0 0)))
+;(setvalueA ar 2 5)
 
 ;; Ejercicio 7 MArray2MList
-;Dado un arreglo de tipo MArray, regresar una lista de tipo MList que contenga todos los
-;elementos del arreglo original
 
-  
-  
 ;; Ejercicio 8 printML
 
 ;Ejercicio 9
@@ -122,4 +118,4 @@
     [(Square? x) (* (Square-len x) (Square-len x))] ;cara * cara
     [(Rectangle? x)(*(Rectangle-leng x)(Rectangle-height x))]));base*altura
 
-;; Ejercicio 18 in-figure?
+;; Ejercicio in-figure?
