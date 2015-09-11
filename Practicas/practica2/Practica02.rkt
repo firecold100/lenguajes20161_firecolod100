@@ -151,6 +151,22 @@
 (test (mapML cdr (MCons '(1 2) (MEmpty))) (MCons '(2) (MEmpty)))
      
 ;; Ejercicio 12 filterML
+(define (filterML funcion lst)
+  (cond
+    [(MEmpty? lst) (MEmpty)]
+    [(MList? lst) (if (funcion (MCons-value lst))
+          (MCons (MCons-value lst) (filterML funcion (MCons-next lst)))
+          (filterML funcion (MCons-next lst)))]))
+
+(test (filterML (lambda (x) (not (zero? x))) (MCons 2 (MCons 0 (MCons 1 (MEmpty))))) (MCons 2 (MCons 1 (MEmpty))))
+(test (filterML (lambda (l) (not (MEmpty? l)))
+                (MCons (MCons 1 (MCons 4 (MEmpty))) (MCons (MEmpty) (MCons 1 (MEmpty)))))
+      (MCons (MCons 1 (MCons 4 (MEmpty))) (MCons 1 (MEmpty))))
+(test (filterML (lambda (x) (number? x)) (MCons "a" (MCons (MEmpty) (MCons 1 (MEmpty))))) (MCons 1 (MEmpty)))
+(test (filterML (lambda (x) (string? x)) (MCons "a" (MCons pi (MCons 1 (MEmpty))))) (MCons "a" (MEmpty)))
+(test (filterML (lambda (x) (> x 20)) (MCons 2 (MCons 340 (MCons 1 (MCons 23 (MEmpty)))))) (MCons 340 (MCons 23 (MEmpty))))
+
+
 ;define the below data types and values
 (define-type Coordinates
   [GPS (lat number?)
