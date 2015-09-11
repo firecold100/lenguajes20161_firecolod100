@@ -183,6 +183,9 @@
 (define plaza-perisur (building "Plaza Perisur" gps-perisur))
 
 (define plazas (MCons plaza-satelite (MCons plaza-perisur (MEmpty))))
+(define plazas1 (MCons ciencias (MCons plaza-perisur (MEmpty))))
+(define plazas2 (MCons ciencias (MCons zocalo (MEmpty))))
+(define plazas3 (MCons plaza-perisur (MCons plaza-satelite (MEmpty))))
 
 ;;Auxiliar function
 ;; it takes a number given in degrees and returns the number given in radians
@@ -225,6 +228,15 @@
     [else[MCons (building-loc(MCons-value lst))(gps-coordinates (MCons-next lst))]]))
 
 (test (gps-coordinates (MEmpty)) (MEmpty))
+(test (gps-coordinates plazas) 
+      (MCons (GPS 19.510482 -99.23411900000002) (MCons (GPS 19.304135 -99.19001000000003) (MEmpty))))
+(test (gps-coordinates plazas1)
+(MCons (GPS 19.3239411016 -99.179806709) (MCons (GPS 19.304135 -99.19001000000003) (MEmpty))))
+(test (gps-coordinates plazas2) 
+      (MCons (GPS 19.3239411016 -99.179806709) (MCons (GPS 19.432721893261117 -99.13332939147949) (MEmpty))))
+(test (gps-coordinates plazas3)
+      (MCons (GPS 19.304135 -99.19001000000003) (MCons (GPS 19.510482 -99.23411900000002) (MEmpty))))
+
 
 ;; Ejercicio 15 closest-building
 
