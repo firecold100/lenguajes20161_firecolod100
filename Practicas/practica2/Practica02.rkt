@@ -157,12 +157,35 @@
 
 (define plazas (MCons plaza-satelite (MCons plaza-perisur (MEmpty))))
 
+;;Auxiliar function
+;; it takes a number given in degrees and returns the number given in radians
+;; (number)->(number)
+(define (degtorad n)
+  [* n (/ pi 180)])
+
 ;; Ejercicio 13 haversine
-;; Ejercicio 13 haversine
-#|(define (haversine gps1 gps2)
-  (cases
-     [(not (GPS? gps1)) error "The first param is not of type GPS" ]
-     [(not (GPS? gps2)) error "The second param is not of type GPS" ]))|#
+(define (haversine gps1 gps2)
+  (cond
+    [(not (GPS? gps1)) error "The first param is not of type GPS" ]
+    [(not (GPS? gps2)) error "The second param is not of type GPS" ]
+    [else (let* ([lat1 (degtorad (GPS-lat gps1))] ;We convert from degrees to radians the param lat of "the object" gps1
+                 [long1 (degtorad (GPS-long gps1))] ;We convert from degrees to radians the param long of "the object" gps1
+                 [lat2 (degtorad(GPS-lat gps2))] ;We convert from degrees to radians the param lat of "the object" gps2
+                 [long2 (degtorad(GPS-long gps2))] ;We convert from degrees to radians the param long of "the object" gps2
+                 [deltalat (- lat2 lat1)] ;Difference between two latitudes
+                 [deltalong (- long2 long1)] ;Difference between two lengths
+                 [a (* (sin (/ deltalat 2)) (sin (/ deltalat 2)) )];square of sin(deltalat/2)
+                 [t1 (cos lat1)] ;Cosine of latitude 1
+                 [t2 (cos lat2)] ; Cosine of latitude 2
+                 [t3 (* (sin (/ deltalong 2)) (sin (/ deltalong 2)))] ;square of sin(deltalong/2)
+                 [t (* t1 t2 t3)]; multiplication of t1, t2 and t3
+                 [b (+ a t)] ;Sum of a and t
+                 [r 6367] ;Radious of earth?
+                 [raiz (sqrt b)] ;The "big root" in formula
+                 [result (* 2 r (asin (sqrt b)))])
+            result)]))
+(test (haversine gps-ciencias gps-zocalo) 13.033219276117368 )
+
 ;; Ejercicio 14
 (define (gps-coordinates lst)
   (cond 
