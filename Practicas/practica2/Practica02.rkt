@@ -19,7 +19,6 @@
   [TLEmpty]
   (NodeN (value number?) (sons (listof NTree?))))
 
-
 ;(NTree? (TLEmpty))
 ;(NTree? (NodeN 1 (list (TLEmpty) (TLEmpty) (TLEmpty))))
 ;(NTree? (NodeN 1 (list (NodeN 2 (list (TLEmpty)))
@@ -31,7 +30,7 @@
   [2D-Point (x number?) (y number?)])
 
 ;(Position? (2D-Point 0 0))
-;(Position? (2D-Point 1 (sqrt 2)))
++;(Position? (2D-Point 1 (sqrt 2)))
 
 ;Ejercicio 5
 (define-type Figure
@@ -125,7 +124,7 @@
 (define (mapML fun lst)
   (cond 
     [(MEmpty? lst) (MEmpty)]
-    [else[MCons (fun [MCons-value lst]) (mapML fun (MCons-next lst))]])) 
+    [else[MCons (fun [MCons-value lst]) (mapML fun (MCons-next lst))]]))
 
 (test (mapML add1 (MCons 7 (MCons 4 (MEmpty)))) (MCons 8 (MCons 5 (MEmpty))))
 (test (mapML (lambda (x) (* x x)) (MCons 10 (MCons 3 (MEmpty)))) (MCons 100 (MCons 9 (MEmpty))))
@@ -178,11 +177,16 @@
                  [t3 (* (sin (/ deltalong 2)) (sin (/ deltalong 2)))] ;square of sin(deltalong/2)
                  [t (* t1 t2 t3)]; multiplication of t1, t2 and t3
                  [b (+ a t)] ;Sum of a and t
-                 [r 6367] ;Radious of earth?
+                 [r 6367] ;Radius of earth?
                  [raiz (sqrt b)] ;The "big root" in formula
                  [result (* 2 r (asin (sqrt b)))])
             result)]))
-(test (haversine gps-ciencias gps-zocalo) 13.033219276117368 )
+
+(test (haversine gps-ciencias gps-zocalo) 13.033219276117368)
+(test (haversine gps-ciencias gps-perisur) 2.44727738966455)
+(test (haversine gps-satelite gps-perisur) 23.391736010506026)
+(test (haversine gps-satelite gps-zocalo) 13.644610757254002)
+(test (haversine gps-ciencias gps-satelite) 21.496697489798446)
 
 ;; Ejercicio 14
 (define (gps-coordinates lst)
