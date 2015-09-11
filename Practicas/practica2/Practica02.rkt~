@@ -11,7 +11,9 @@
   [MCons (value any/c) (next MList?)])
 
 ;(test (MEmpty) (MEmpty))
+;(test (MList? (MEmpty)) #t)
 ;(test (MCons 1 (MCons 2 (MCons 3 (MEmpty)))) (MCons 1 (MCons 2 (MCons 3 (MEmpty)))))
+;(test (MList? (MCons 7 (MCons 4 (MCons 10 (MEmpty))))) #t)
 
 ;Ejercicio 3
 (define-type NTree
@@ -30,6 +32,7 @@
   [2D-Point (x number?) (y number?)])
 
 ;(test (2D-Point 0 0) (2D-Point 0 0))
+;(test (Position? (2D-Point 3 4.5)) #t)
 ;(test (2D-Point 1 (sqrt 2)) (2D-Point 1 1.4142135623730951))
 
 ;Ejercicio 5
@@ -44,25 +47,21 @@
 
 ;Ejercicio 6
 (define (setvalueA array position value)
-  (cond
-    [(MArray? array) (if (> position (- (MArray-leng array) 1))
+  (if (not(Array? array))
+      (error 'setvalueA "Unknown Type")
+      (if (> position (- (MArray-leng array) 1))
           (error 'setvalueA "Out of bounds")
-          (MArray (MArray-leng array) (cambia (MArray-elements array) position value 0)))]
-    [else (error "No es del tipo MArray")]))
+          (coloca (MArray-elements array) position value 0))))
 
 ;funcion auxiliar
-(define (cambia array position value count)
+(define (coloca array position value count)
   (cond
-    [(< count position) (cons (car array) (cambia (cdr array) position value (add1 count)))]
+    [(< count position) (cons (car array) (coloca (cdr array) position value (add1 count)))]
     [(> count position) empty]
     [(= count position) (cons value (cdr array))]))
 
 (define ar (MArray 5 '(0 0 0 0 0)))
-(test (setvalueA ar 2 5) (MArray 5 '(0 0 5 0 0)))
-(test (setvalueA ar 4 2) (MArray 5 '(0 0 0 0 2)))
-(test (setvalueA (MArray 5 '(1 1 1 1 1)) 1 3) (MArray 5 '(1 3 1 1 1)))
-(test (setvalueA (MArray 7 '(1 1 1 1 1 0 0)) 6 3) (MArray 7 '(1 1 1 1 1 0 3)))
-(test/exn (setvalueA (MArray 3 '(0 1 1)) 4 3) "setvalueA: Out of bounds")
+;(setvalueA ar 2 5)
 
 ;; Ejercicio 7 MArray2MList
 ;Dado un arreglo de tipo MArray, regresar una lista de tipo MList que contenga todos los
@@ -72,11 +71,10 @@
     [(empty? (MArray-elements array)) (MEmpty)]
     [else (MCons (car (MArray-elements array)) (MArray2MList (MArray (- (MArray-leng array) 1) (cdr (MArray-elements array)))))]))
 
-(test (MArray2MList (MArray 0 '())) (MEmpty))
-(test (MArray2MList (MArray 5 '("a" "b"))) (MCons "a" (MCons "b" (MEmpty))))
-(test (MArray2MList (MArray 3 '(1 2 3))) (MCons 1 (MCons 2 (MCons 3(MEmpty)))))
-(test (MArray2MList (MArray 5 '("a" "b" 1 2))) (MCons "a" (MCons "b" (MCons 1 (MCons 2 (MEmpty))))))
-(test (MArray2MList (MArray 4 '(0 () "hola" 3))) (MCons 0 (MCons '() (MCons "hola" (MCons 3 (MEmpty))))))
+;(define array1 (MArray 0 '()))
+;(test (MArray2MList array1) (MEmpty))
+;(test (MArray2MList (MArray 5 '("a" "b"))) (MCons "a" (MCons "b" (MEmpty))))
+  
   
 ; Ejercicio 8 printML
 (define (printML lst)
@@ -89,11 +87,9 @@
     [(MEmpty? (MCons-next lst)) (string-append (~a (MCons-value lst)) "]")]
     [else (string-append (~a (MCons-value lst)) ", " (saca (MCons-next lst)))]))
 
-(test (printML (MEmpty)) "[]")
-(test (printML (MCons 7 (MEmpty))) "[7]")
-(test (printML (MCons 7 (MCons 4 (MEmpty)))) "[7, 4]")
-(test (printML (MCons "a" (MCons 4 (MEmpty)))) "[a, 4]")
-(test (printML (MCons "a" (MCons 4 (MCons "Hola" (MEmpty))))) "[a, 4, Hola]")
+;(printML (MEmpty))
+;(printML (MCons 7 (MEmpty)))
+;(printML (MCons 7 (MCons 4 (MEmpty))))
 
 ;Ejercicio 9
 (define (concatML lst1 lst2)
@@ -175,7 +171,6 @@
 (define (in-figure? figura punto)
   (cond
     [(Square? figura) (and (esta-x (Square-point figura) (Square-len figura) punto) (esta-y (Square-point figura) (Square-len figura) punto))]
-    [(Rectangle? figura) (and (esta-x (Rectangle-point figura) (Rectangle-leng figura) punto) (esta-y (Rectangle-point figura) (Rectangle-height figura) punto))]
     [(Circle? figura) (< (distancia (Circle-point figura) punto) (Circle-radio figura))]))
 
 (define (esta-x punto1 distancia punto2)
@@ -183,8 +178,5 @@
 (define (esta-y punto1 distancia punto2)
   (and (<= (- (2D-Point-y punto1) distancia) (2D-Point-y punto2)) (>= (2D-Point-y punto1) (2D-Point-y punto2))))
 
-(test (in-figure? (Circle (2D-Point 0 0) 3) (2D-Point 4 0)) #f)
-(test (in-figure? (Circle (2D-Point 0 1) 5) (2D-Point 2 1)) #t)
-(test (in-figure? (Square (2D-Point 3 4) 4) (2D-Point 1 1)) #f)
-(test (in-figure? (Rectangle (2D-Point 2 2) 2 4) (2D-Point 3 0)) #t)
-(test (in-figure? (Rectangle (2D-Point 2 2) 2 4) (2D-Point 1 1)) #f)
+;(in-figure? (Circle (2D-Point 0 0) 3) (2D-Point 4 0))
+(in-figure? (Square (2D-Point 2 2) 4) (2D-Point 1 1))
