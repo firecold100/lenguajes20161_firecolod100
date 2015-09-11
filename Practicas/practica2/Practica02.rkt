@@ -3,16 +3,15 @@
 ;Ejercicio 1
 (define-type Array
   [MArray (leng number?) (elements list?)])
-
-;(Array? (MArray 4 '(1 2 3)))
+;(test (Array? (MArray 4 '(1 2 3))) #t)
 
 ;Ejercicio 2
 (define-type MList
   [MEmpty]
   [MCons (value any/c) (next MList?)])
 
-;(MEmpty)
-;(MList? (MCons 1 (MCons 2 (MCons 3 (MEmpty)))))
+;(test (MEmpty) (MEmpty))
+;(test (MCons 1 (MCons 2 (MCons 3 (MEmpty)))) (MCons 1 (MCons 2 (MCons 3 (MEmpty)))))
 
 ;Ejercicio 3
 (define-type NTree
@@ -30,8 +29,8 @@
 (define-type Position
   [2D-Point (x number?) (y number?)])
 
-;(Position? (2D-Point 0 0))
-;(Position? (2D-Point 1 (sqrt 2)))
+;(test (2D-Point 0 0) (2D-Point 0 0))
+;(test (2D-Point 1 (sqrt 2)) (2D-Point 1 1.4142135623730951))
 
 ;Ejercicio 5
 (define-type Figure
@@ -51,7 +50,7 @@
           (MArray (MArray-leng array) (cambia (MArray-elements array) position value 0)))]
     [else (error "No es del tipo MArray")]))
 
-;funcion auxiliar para cambiar el valor en la posicion
+;funcion auxiliar
 (define (cambia array position value count)
   (cond
     [(< count position) (cons (car array) (cambia (cdr array) position value (add1 count)))]
@@ -103,12 +102,6 @@
     [(MEmpty? lst2) lst1]
     [else (MCons (MCons-value lst1) (concatML (MCons-next lst1) lst2))]))
 
-(test (concatML (MCons 7 (MCons 4 (MEmpty))) (MCons 1 (MEmpty))) (MCons 7 (MCons 4 (MCons 1 (MEmpty)))))
-(test (concatML (MCons 7 (MCons 4 (MEmpty))) (MCons 1 (MCons 10 (MEmpty)))) (MCons 7 (MCons 4 (MCons 1 (MCons 10 (MEmpty))))))
-(test (concatML (MCons 1 (MEmpty)) (MEmpty)) (MCons 1 (MEmpty)))
-(test (concatML (MEmpty) (MCons "a" (MEmpty))) (MCons "a" (MEmpty)))
-(test (concatML (MCons 1 (MEmpty)) (MCons "a" (MEmpty))) (MCons 1 (MCons "a" (MEmpty))))
-
 ;Ejercicio 10
 (define (lengthML lst)
   (cond
@@ -116,23 +109,14 @@
     [(MList? lst) (+ 1 (lengthML (MCons-next lst)))]
     [else (error "No es del tipo MList")]))
 
-(test (lengthML (MEmpty)) 0)
-(test (lengthML (MCons 7 (MCons 4 (MEmpty)))) 2)
-(test (lengthML (MCons "a" (MEmpty))) 1)
-(test (lengthML (MCons "a" (MCons 1 (MCons 2 (MEmpty))))) 3)
-(test (lengthML (MCons "a" (MCons "b" (MCons 7 (MCons 4 (MEmpty)))))) 4)
+;(lengthML (MEmpty))
+;(lengthML (MCons 7 (MCons 4 (MEmpty))))
 
 ;; Ejercicio 11 mapML
 (define (mapML fun lst)
   (cond 
     [(MEmpty? lst) (MEmpty)]
-    [else[MCons (fun [MCons-value lst]) (mapML fun (MCons-next lst))]])) 
-
-(test (mapML add1 (MCons 7 (MCons 4 (MEmpty)))) (MCons 8 (MCons 5 (MEmpty))))
-(test (mapML (lambda (x) (* x x)) (MCons 10 (MCons 3 (MEmpty)))) (MCons 100 (MCons 9 (MEmpty))))
-(test (mapML sqrt (MCons 4 (MCons 9 (MEmpty)))) (MCons 2 (MCons 3 (MEmpty))))
-(test (mapML car (MCons '(1 2) (MEmpty))) (MCons 1 (MEmpty)))
-(test (mapML cdr (MCons '(1 2) (MEmpty))) (MCons '(2) (MEmpty)))
+    [else[MCons (fun [MCons-value lst]) (mapML fun (MCons-next lst))]]))  
      
 ;; Ejercicio 12 filterML
 
@@ -180,7 +164,7 @@
                  [t3 (* (sin (/ deltalong 2)) (sin (/ deltalong 2)))] ;square of sin(deltalong/2)
                  [t (* t1 t2 t3)]; multiplication of t1, t2 and t3
                  [b (+ a t)] ;Sum of a and t
-                 [r 6367] ;Radious of earth?
+                 [r 6367] ;Radius of earth?
                  [raiz (sqrt b)] ;The "big root" in formula
                  [result (* 2 r (asin (sqrt b)))])
             result)]))
@@ -211,12 +195,6 @@
     [(Circle? x) (* pi (* (Circle-radio x) (Circle-radio x)))] ;pi * r^2
     [(Square? x) (* (Square-len x) (Square-len x))] ;cara * cara
     [(Rectangle? x)(*(Rectangle-leng x)(Rectangle-height x))]));base*altura
-
-(test (area (Circle (2D-Point 5 5) 4)) 50.26548245743669)
-(test (area (Square (2D-Point 0 0) 20)) 400)
-(test (area (Rectangle (2D-Point 3 4) 5 10)) 50)
-(test (area (Square (2D-Point 5 6) 5)) 25)
-(test (area (Rectangle (2D-Point 1 4) 10 30)) 300)
 
 ; Ejercicio 18 in-figure?
 (define (distancia punto1 punto2)
