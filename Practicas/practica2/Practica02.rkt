@@ -242,10 +242,6 @@
 
 ;; Ejercicio 16 buildings-at-distance
 
-(define (buildings-at-distance b lst d)
-  (cond
-    [(MEmpty? lst) (MEmpty)]))
-
 ;; Ejercicio 17
 (define (area x)
   (cond 
