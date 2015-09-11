@@ -189,13 +189,13 @@
                  [long2 (degtorad(GPS-long gps2))] ;We convert from degrees to radians the param long of "the object" gps2
                  [deltalat (- lat2 lat1)] ;Difference between two latitudes
                  [deltalong (- long2 long1)] ;Difference between two lengths
-                 [a (* (sin (/ deltalat 2)) (sin (/ deltalat 2)) )];square of sin(deltalat/2)
+                 [a (* (sin (/ deltalat 2)) (sin (/ deltalat 2)) )];square of sin(Δlat/2)
                  [t1 (cos lat1)] ;Cosine of latitude 1
                  [t2 (cos lat2)] ; Cosine of latitude 2
-                 [t3 (* (sin (/ deltalong 2)) (sin (/ deltalong 2)))] ;square of sin(deltalong/2)
+                 [t3 (* (sin (/ deltalong 2)) (sin (/ deltalong 2)))] ;square of sin(Δlong/2)
                  [t (* t1 t2 t3)]; multiplication of t1, t2 and t3
                  [b (+ a t)] ;Sum of a and t
-                 [r 6367] ;Radius of earth?
+                 [r 6367] ;Radius of earth
                  [raiz (sqrt b)] ;The "big root" in formula
                  [result (* 2 r (asin (sqrt b)))])
             result)]))
@@ -215,6 +215,23 @@
 (test (gps-coordinates (MEmpty)) (MEmpty))
 
 ;; Ejercicio 15 closest-building
+
+#| 
+Auxiliar function.
+Returns the nth element of a given array
+(number)(array) -> (element)
+|#
+(define (getElement n arr)
+  (cond
+    [(not (MArray? arr)) error "The second argument is not of type MArray"]
+    [(or (not (>= n (MArray-leng))) (not (>= (MArray-leng) 0))) error "The element doesn't exist in the MArray structure"])
+  )
+
+(define (closest-building b bmlist)
+  (cond
+    [(not (building? b)) error "The first param is not of type building"]
+    [(MEmpty? bmlist) error "The list of buildings is empty"]
+    [(not (MList? bmlist)) error "The second param is not of type MList"]))
 
 ;; Ejercicio 16 buildings-at-distance
 
