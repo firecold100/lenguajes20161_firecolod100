@@ -5,14 +5,21 @@
   [MArray (leng number?) (elements list?)])
 
 ;(Array? (MArray 4 '(1 2 3)))
+;(test (Array? (MArray 4 '(1 2 3))) #t)
 
 ;Ejercicio 2
 (define-type MList
   [MEmpty]
   [MCons (value any/c) (next MList?)])
 
+
 ;(MList? (MEmpty))
 ;(MList? (MCons 1 (MCons 2 (MCons 3 (MEmpty)))))
+(test (MEmpty) (MEmpty))
+(test (MCons 1 (MCons 2 (MCons 3 (MEmpty)))) (MCons 1 (MCons 2 (MCons 3 (MEmpty)))))
+(test (MCons "a" (MCons "b" (MEmpty))) (MCons "a" (MCons "b" (MEmpty))))
+(test (MCons "a" (MCons "1" (MEmpty))) (MCons "a" (MCons "1" (MEmpty))))
+
 
 ;Ejercicio 3
 (define-type NTree
@@ -29,8 +36,14 @@
 (define-type Position
   [2D-Point (x number?) (y number?)])
 
+
 ;(Position? (2D-Point 0 0))
-+;(Position? (2D-Point 1 (sqrt 2)))
+;(Position? (2D-Point 1 (sqrt 2)))
+(test (2D-Point 0 0) (2D-Point 0 0))
+(test (2D-Point 5 0) (2D-Point 5 0))
+(test (2D-Point 5 -10) (2D-Point 5  -10))
+(test (2D-Point 0 4) (2D-Point 0 4))
+(test (2D-Point 1 (sqrt 2)) (2D-Point 1 1.4142135623730951))
 
 ;Ejercicio 5
 (define-type Figure
@@ -41,6 +54,11 @@
 ;(Figure? (Circle (2D-Point 2 2) 2))
 ;(Figure? (Square (2D-Point 0 3) 3))
 ;(Figure? (Rectangle (2D-Point 0 2) 2 3)
+(test (Circle (2D-Point 2 2) 2) (Circle (2D-Point 2 2) 2))
+(test (Circle (2D-Point 0 0) 1) (Circle (2D-Point 0 0) 1))
+(test (Square (2D-Point 0 3) 3) (Square (2D-Point 0 3) 3))
+(test (Rectangle (2D-Point -1 2) 2 3) (Rectangle (2D-Point -1 2) 2 3))
+(test (Rectangle (2D-Point 0 0) 2 5) (Rectangle (2D-Point 0 0) 2 5))
 
 ;Ejercicio 6
 (define (setvalueA array position value)
@@ -117,8 +135,8 @@
 (test (lengthML (MEmpty)) 0)
 (test (lengthML (MCons 7 (MCons 4 (MEmpty)))) 2)
 (test (lengthML (MCons "a" (MEmpty))) 1)
-(test (lengthML (MCons "a" (MCons 1 (MCons 2 (MEmpty))))) 3)
-(test (lengthML (MCons "a" (MCons "b" (MCons 7 (MCons 4 (MEmpty)))))) 4)
+(test (lengthML (MCons 7 (MCons 4 (MCons 5 (MCons 6(MEmpty)))))) 4)
+(test (lengthML (MCons 7 (MCons 4 (MCons "a" (MCons "b" (MCons 1 (MEmpty))))))) 5)
 
 ;; Ejercicio 11 mapML
 (define (mapML fun lst)
