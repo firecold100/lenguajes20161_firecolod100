@@ -6,12 +6,16 @@
 
 ;(Array? (MArray 4 '(1 2 3)))
 ;(test (Array? (MArray 4 '(1 2 3))) #t)
+(test (MArray 3 '(1 2 3 )) (MArray 3 '(1 2 3 ))) 
+(test (MArray 5 '(1 2 3 "a" 1 )) (MArray 5 '(1 2 3 "a" 1))) 
+(test (MArray 1 '("a" )) (MArray 1 '("a"))) 
+(test (MArray 0 '()) (MArray 0 '())) 
+(test (MArray 2 '("a" "b" )) (MArray 2 '("a" "b" ))) 
 
 ;Ejercicio 2
 (define-type MList
   [MEmpty]
   [MCons (value any/c) (next MList?)])
-
 
 ;(MList? (MEmpty))
 ;(MList? (MCons 1 (MCons 2 (MCons 3 (MEmpty)))))
@@ -19,7 +23,7 @@
 (test (MCons 1 (MCons 2 (MCons 3 (MEmpty)))) (MCons 1 (MCons 2 (MCons 3 (MEmpty)))))
 (test (MCons "a" (MCons "b" (MEmpty))) (MCons "a" (MCons "b" (MEmpty))))
 (test (MCons "a" (MCons "1" (MEmpty))) (MCons "a" (MCons "1" (MEmpty))))
-
+(test (MCons "a"(MEmpty))(MCons "a" (MEmpty)))
 
 ;Ejercicio 3
 (define-type NTree
@@ -32,10 +36,18 @@
 ;                        (NodeN 3 (list (TLEmpty)))
 ;                        (NodeN 4 (list (TLEmpty) (TLEmpty) (TLEmpty))))))
 
+(test [TLEmpty] [TLEmpty])
+(test (NodeN 1 (list(NodeN 2(list (NodeN 2(list(TLEmpty)))))))
+      (NodeN 1 (list(NodeN 2(list (NodeN 2(list(TLEmpty))))))))
+(test (NodeN 0 (list (NodeN 2(list (TLEmpty))) (NodeN 2(list (TLEmpty))) (NodeN 2(list (TLEmpty))))) 
+      (NodeN 0 (list (NodeN 2(list (TLEmpty))) (NodeN 2(list (TLEmpty))) (NodeN 2(list (TLEmpty))))))
+(test (NodeN 1 (list (TLEmpty))) (NodeN 1 (list (TLEmpty))))
+(test (NodeN 1 (list (NodeN 2 (list (NodeN 2 (list(TLEmpty)))))))
+      (NodeN 1 (list (NodeN 2 (list (NodeN 2 (list(TLEmpty))))))))
+
 ;Ejercicio 4
 (define-type Position
   [2D-Point (x number?) (y number?)])
-
 
 ;(Position? (2D-Point 0 0))
 ;(Position? (2D-Point 1 (sqrt 2)))
