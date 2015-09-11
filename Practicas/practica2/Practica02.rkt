@@ -253,7 +253,6 @@
 (test (gps-coordinates plazas3)
       (MCons (GPS 19.304135 -99.19001000000003) (MCons (GPS 19.510482 -99.23411900000002) (MEmpty))))
 
-
 ;; Ejercicio 15 closest-building
 
 #| 
