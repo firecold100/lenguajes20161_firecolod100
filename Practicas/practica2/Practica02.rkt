@@ -6,12 +6,16 @@
 
 ;(Array? (MArray 4 '(1 2 3)))
 ;(test (Array? (MArray 4 '(1 2 3))) #t)
+(test (MArray 3 '(1 2 3 )) (MArray 3 '(1 2 3 ))) 
+(test (MArray 5 '(1 2 3 "a" 1 )) (MArray 5 '(1 2 3 "a" 1))) 
+(test (MArray 1 '("a" )) (MArray 1 '("a"))) 
+(test (MArray 0 '()) (MArray 0 '())) 
+(test (MArray 2 '("a" "b" )) (MArray 2 '("a" "b" ))) 
 
 ;Ejercicio 2
 (define-type MList
   [MEmpty]
   [MCons (value any/c) (next MList?)])
-
 
 ;(MList? (MEmpty))
 ;(MList? (MCons 1 (MCons 2 (MCons 3 (MEmpty)))))
@@ -19,7 +23,7 @@
 (test (MCons 1 (MCons 2 (MCons 3 (MEmpty)))) (MCons 1 (MCons 2 (MCons 3 (MEmpty)))))
 (test (MCons "a" (MCons "b" (MEmpty))) (MCons "a" (MCons "b" (MEmpty))))
 (test (MCons "a" (MCons "1" (MEmpty))) (MCons "a" (MCons "1" (MEmpty))))
-
+(test (MCons "a"(MEmpty))(MCons "a" (MEmpty)))
 
 ;Ejercicio 3
 (define-type NTree
@@ -32,10 +36,18 @@
 ;                        (NodeN 3 (list (TLEmpty)))
 ;                        (NodeN 4 (list (TLEmpty) (TLEmpty) (TLEmpty))))))
 
+(test [TLEmpty] [TLEmpty])
+(test (NodeN 1 (list(NodeN 2(list (NodeN 2(list(TLEmpty)))))))
+      (NodeN 1 (list(NodeN 2(list (NodeN 2(list(TLEmpty))))))))
+(test (NodeN 0 (list (NodeN 2(list (TLEmpty))) (NodeN 2(list (TLEmpty))) (NodeN 2(list (TLEmpty))))) 
+      (NodeN 0 (list (NodeN 2(list (TLEmpty))) (NodeN 2(list (TLEmpty))) (NodeN 2(list (TLEmpty))))))
+(test (NodeN 1 (list (TLEmpty))) (NodeN 1 (list (TLEmpty))))
+(test (NodeN 1 (list (NodeN 2 (list (NodeN 2 (list(TLEmpty)))))))
+      (NodeN 1 (list (NodeN 2 (list (NodeN 2 (list(TLEmpty))))))))
+
 ;Ejercicio 4
 (define-type Position
   [2D-Point (x number?) (y number?)])
-
 
 ;(Position? (2D-Point 0 0))
 ;(Position? (2D-Point 1 (sqrt 2)))
@@ -151,6 +163,22 @@
 (test (mapML cdr (MCons '(1 2) (MEmpty))) (MCons '(2) (MEmpty)))
      
 ;; Ejercicio 12 filterML
+(define (filterML funcion lst)
+  (cond
+    [(MEmpty? lst) (MEmpty)]
+    [(MList? lst) (if (funcion (MCons-value lst))
+          (MCons (MCons-value lst) (filterML funcion (MCons-next lst)))
+          (filterML funcion (MCons-next lst)))]))
+
+(test (filterML (lambda (x) (not (zero? x))) (MCons 2 (MCons 0 (MCons 1 (MEmpty))))) (MCons 2 (MCons 1 (MEmpty))))
+(test (filterML (lambda (l) (not (MEmpty? l)))
+                (MCons (MCons 1 (MCons 4 (MEmpty))) (MCons (MEmpty) (MCons 1 (MEmpty)))))
+      (MCons (MCons 1 (MCons 4 (MEmpty))) (MCons 1 (MEmpty))))
+(test (filterML (lambda (x) (number? x)) (MCons "a" (MCons (MEmpty) (MCons 1 (MEmpty))))) (MCons 1 (MEmpty)))
+(test (filterML (lambda (x) (string? x)) (MCons "a" (MCons pi (MCons 1 (MEmpty))))) (MCons "a" (MEmpty)))
+(test (filterML (lambda (x) (> x 20)) (MCons 2 (MCons 340 (MCons 1 (MCons 23 (MEmpty)))))) (MCons 340 (MCons 23 (MEmpty))))
+
+
 ;define the below data types and values
 (define-type Coordinates
   [GPS (lat number?)
@@ -171,6 +199,9 @@
 (define plaza-perisur (building "Plaza Perisur" gps-perisur))
 
 (define plazas (MCons plaza-satelite (MCons plaza-perisur (MEmpty))))
+(define plazas1 (MCons ciencias (MCons plaza-perisur (MEmpty))))
+(define plazas2 (MCons ciencias (MCons zocalo (MEmpty))))
+(define plazas3 (MCons plaza-perisur (MCons plaza-satelite (MEmpty))))
 
 ;;Auxiliar function
 ;; it takes a number given in degrees and returns the number given in radians
@@ -213,6 +244,15 @@
     [else[MCons (building-loc(MCons-value lst))(gps-coordinates (MCons-next lst))]]))
 
 (test (gps-coordinates (MEmpty)) (MEmpty))
+(test (gps-coordinates plazas) 
+      (MCons (GPS 19.510482 -99.23411900000002) (MCons (GPS 19.304135 -99.19001000000003) (MEmpty))))
+(test (gps-coordinates plazas1)
+(MCons (GPS 19.3239411016 -99.179806709) (MCons (GPS 19.304135 -99.19001000000003) (MEmpty))))
+(test (gps-coordinates plazas2) 
+      (MCons (GPS 19.3239411016 -99.179806709) (MCons (GPS 19.432721893261117 -99.13332939147949) (MEmpty))))
+(test (gps-coordinates plazas3)
+      (MCons (GPS 19.304135 -99.19001000000003) (MCons (GPS 19.510482 -99.23411900000002) (MEmpty))))
+
 
 ;; Ejercicio 15 closest-building
 
@@ -234,10 +274,6 @@ Returns the nth element of a given array
     [(not (MList? bmlist)) error "The second param is not of type MList"]))
 
 ;; Ejercicio 16 buildings-at-distance
-
-(define (buildings-at-distance b lst d)
-  (cond
-    [(MEmpty? lst) (MEmpty)]))
 
 ;; Ejercicio 17
 (define (area x)
