@@ -168,7 +168,12 @@
                  [raiz (sqrt b)] ;The "big root" in formula
                  [result (* 2 r (asin (sqrt b)))])
             result)]))
-(test (haversine gps-ciencias gps-zocalo) 13.033219276117368 )
+
+(test (haversine gps-ciencias gps-zocalo) 13.033219276117368)
+(test (haversine gps-ciencias gps-perisur) 2.44727738966455)
+(test (haversine gps-satelite gps-perisur) 23.391736010506026)
+(test (haversine gps-satelite gps-zocalo) 13.644610757254002)
+(test (haversine gps-ciencias gps-satelite) 21.496697489798446)
 
 ;; Ejercicio 14
 (define (gps-coordinates lst)
