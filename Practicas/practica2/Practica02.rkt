@@ -11,7 +11,7 @@
   [MEmpty]
   [MCons (value any/c) (next MList?)])
 
-;(MEmpty)
+;(MList? (MEmpty))
 ;(MList? (MCons 1 (MCons 2 (MCons 3 (MEmpty)))))
 
 ;Ejercicio 3
@@ -39,9 +39,9 @@
   [Square (point Position?) (len number?)]
   [Rectangle (point Position?) (height number?) (leng number?)])
 
-;(Circle (2D-Point 2 2) 2)
-;(Square (2D-Point 0 3) 3)
-;(Rectangle (2D-Point 0 2) 2 3)
+;(Figure? (Circle (2D-Point 2 2) 2))
+;(Figure? (Square (2D-Point 0 3) 3))
+;(Figure? (Rectangle (2D-Point 0 2) 2 3)
 
 ;Ejercicio 6
 (define (setvalueA array position value)
@@ -51,7 +51,7 @@
           (MArray (MArray-leng array) (cambia (MArray-elements array) position value 0)))]
     [else (error "No es del tipo MArray")]))
 
-;funcion auxiliar para cambiar el valor en la posicion
+;auxiliar function to change the value at position given
 (define (cambia array position value count)
   (cond
     [(< count position) (cons (car array) (cambia (cdr array) position value (add1 count)))]
@@ -66,8 +66,7 @@
 (test/exn (setvalueA (MArray 3 '(0 1 1)) 4 3) "setvalueA: Out of bounds")
 
 ;; Ejercicio 7 MArray2MList
-;Dado un arreglo de tipo MArray, regresar una lista de tipo MList que contenga todos los
-;elementos del arreglo original
+;Let give an MArray returns a MList with all parameters from the original array
 (define (MArray2MList array)
   (cond
     [(empty? (MArray-elements array)) (MEmpty)]
@@ -135,8 +134,7 @@
 (test (mapML cdr (MCons '(1 2) (MEmpty))) (MCons '(2) (MEmpty)))
      
 ;; Ejercicio 12 filterML
-
-;; Definamos los siguientes tipos de datos y valores
+;define the below data types and values
 (define-type Coordinates
   [GPS (lat number?)
        (long number?)])
@@ -192,6 +190,8 @@
     [(MEmpty? lst)(MEmpty)]
     [else[MCons (building-loc(MCons-value lst))(gps-coordinates (MCons-next lst))]]))
 
+(test (gps-coordinates (MEmpty)) (MEmpty))
+
 ;; Ejercicio 15 closest-building
 
 ;; Ejercicio 16 buildings-at-distance
@@ -204,8 +204,8 @@
 (define (area x)
   (cond 
     [(Circle? x) (* pi (* (Circle-radio x) (Circle-radio x)))] ;pi * r^2
-    [(Square? x) (* (Square-len x) (Square-len x))] ;cara * cara
-    [(Rectangle? x)(*(Rectangle-leng x)(Rectangle-height x))]));base*altura
+    [(Square? x) (* (Square-len x) (Square-len x))] ;length * length
+    [(Rectangle? x)(*(Rectangle-leng x)(Rectangle-height x))]));base*height
 
 (test (area (Circle (2D-Point 5 5) 4)) 50.26548245743669)
 (test (area (Square (2D-Point 0 0) 20)) 400)
