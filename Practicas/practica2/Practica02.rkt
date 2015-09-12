@@ -254,22 +254,31 @@
       (MCons (GPS 19.304135 -99.19001000000003) (MCons (GPS 19.510482 -99.23411900000002) (MEmpty))))
 
 ;; Ejercicio 15 closest-building
-#| 
-Auxiliar function.
-Returns the nth element of a given array
-(number)(array) -> (element)
-|#
-(define (getElement n arr)
-  (cond
-    [(not (MArray? arr)) error "The second argument is not of type MArray"]
-    [(or (not (>= n (MArray-leng))) (not (>= (MArray-leng) 0))) error "The element doesn't exist in the MArray structure"])
-  )
 
-(define (closest-building b bmlist)
+(define (closest-building b blist)
+  #|
+  Auxiliar function.
+  |#
+  (define (getMinimum gpsb hmin minb Mlst)
+  (cond
+   [(MEmpty? Mlst) minb] ;If is empty, then we return the minimum building at distance
+   ;;If the current haversine min value is greater than the next one value, then we assign that value and recurse.
+   [(> hmin (haversine (building-loc gpsb) (building-loc (MCons-value Mlst)))) 
+    (getMinimum gpsb (haversine (building-loc minb) (building-loc (MCons-value Mlst))) (MCons-value Mlst) (MCons-next Mlst))]
+   ;Else, we keep almost equal because there is no value less than the current haversine min.
+   [else (getMinimum gpsb hmin minb (MCons-next Mlst))]))
+  ;;Now the actual function:
   (cond
     [(not (building? b)) error "The first param is not of type building"]
-    [(MEmpty? bmlist) error "The list of buildings is empty"]
-    [(not (MList? bmlist)) error "The second param is not of type MList"]))
+    [(not (MList? blist)) error "The second param is not of type MList"]
+    [else (let* ([inith (haversine (building-loc (MCons-value blist)) (building-loc b))]
+                 [minb (MCons-value blist)])
+            (getMinimum b inith minb blist))]))
+
+(test (closest-building zocalo plazas) (building "Plaza Satelite" (GPS 19.510482 -99.23411900000002)))
+(test (closest-building ciencias plazas) (building "Plaza Perisur" (GPS 19.304135 -99.19001000000003)))
+
+
 
 ;; Ejercicio 16 buildings-at-distance
 (define (buildings-at-distance b lst d)
