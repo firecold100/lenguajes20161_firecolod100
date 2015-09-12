@@ -271,12 +271,16 @@
   (cond
     [(not (building? b)) error "The first param is not of type building"]
     [(not (MList? blist)) error "The second param is not of type MList"]
+    [(MEmpty? blist) b]
     [else (let* ([inith (haversine (building-loc (MCons-value blist)) (building-loc b))]
                  [minb (MCons-value blist)])
             (getMinimum b inith minb blist))]))
 
 (test (closest-building zocalo plazas) (building "Plaza Satelite" (GPS 19.510482 -99.23411900000002)))
 (test (closest-building ciencias plazas) (building "Plaza Perisur" (GPS 19.304135 -99.19001000000003)))
+(test (closest-building zocalo (MCons zocalo(MEmpty))) (building "Zocalo" (GPS 19.432721893261117 -99.13332939147949)))
+(test (closest-building ciencias plazas2) (building "Facultad de Ciencias" (GPS 19.3239411016 -99.179806709)))
+(test (closest-building zocalo plazas1) (building "Facultad de Ciencias" (GPS 19.3239411016 -99.179806709)))
 
 
 
