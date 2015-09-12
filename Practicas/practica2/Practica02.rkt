@@ -246,8 +246,8 @@
 (test (gps-coordinates (MEmpty)) (MEmpty))
 (test (gps-coordinates plazas) 
       (MCons (GPS 19.510482 -99.23411900000002) (MCons (GPS 19.304135 -99.19001000000003) (MEmpty))))
-(test (gps-coordinates plazas1)
-(MCons (GPS 19.3239411016 -99.179806709) (MCons (GPS 19.304135 -99.19001000000003) (MEmpty))))
+(test (gps-coordinates plazas1) 
+      (MCons (GPS 19.3239411016 -99.179806709) (MCons (GPS 19.304135 -99.19001000000003) (MEmpty))))
 (test (gps-coordinates plazas2) 
       (MCons (GPS 19.3239411016 -99.179806709) (MCons (GPS 19.432721893261117 -99.13332939147949) (MEmpty))))
 (test (gps-coordinates plazas3)
@@ -257,10 +257,30 @@
 ;; Ejercicio 15 closest-building
 
 ;; Ejercicio 16 buildings-at-distance
-
 (define (buildings-at-distance b lst d)
   (cond
-    [(MEmpty? lst) (MEmpty)]))
+    [(MEmpty? lst) (MEmpty)]
+    [(MList? lst) (if (<= (haversine (building-loc b) (building-loc (MCons-value lst))) d) 
+              (MCons (MCons-value lst) (buildings-at-distance b (MCons-next lst) d))
+              (buildings-at-distance b (MCons-next lst) d))]))
+
+(define lplazas1 (MCons plaza-satelite (MCons zocalo (MCons plaza-perisur (MEmpty)))))
+(define lplazas2 (MCons ciencias (MCons zocalo (MCons plaza-perisur (MEmpty)))))
+(define lplazas3 (MCons plaza-satelite (MCons ciencias (MCons plaza-perisur (MEmpty)))))
+(define lplazas4 (MCons plaza-satelite (MCons ciencias (MCons zocalo (MEmpty)))))
+(test (buildings-at-distance ciencias lplazas1 10) 
+      (MCons (building "Plaza Perisur" (GPS 19.304135 -99.19001000000003)) (MEmpty)))
+(test (buildings-at-distance ciencias lplazas1 15) 
+      (MCons (building "Zocalo" (GPS 19.432721893261117 -99.13332939147949))
+             (MCons (building "Plaza Perisur" (GPS 19.304135 -99.19001000000003)) 
+                    (MEmpty))))
+(test (buildings-at-distance plaza-satelite lplazas2 15) 
+      (MCons (building "Zocalo" (GPS 19.432721893261117 -99.13332939147949)) 
+             (MEmpty)))
+(test (buildings-at-distance zocalo lplazas3 12) (MEmpty))
+(test (buildings-at-distance plaza-perisur lplazas4 10) 
+      (MCons (building "Facultad de Ciencias" (GPS 19.3239411016 -99.179806709)) 
+             (MEmpty)))
 
 ;; Ejercicio 17
 (define (area x)
