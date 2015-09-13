@@ -120,6 +120,14 @@
     [else (+ 1 (ninBT (BNode-l tree)) (ninBT (BNode-r tree)))]
     )
   )
+;;Tests
+#|
+(test (ninBT arb1) 0)
+(test (ninBT arb2) 1)
+(test (ninBT arb3) 3)
+(test (ninBT arb4) 7)
+(test (ninBT arbol-base) 5)
+|#
 
 ;Ejercicio 10 nlBT
 
