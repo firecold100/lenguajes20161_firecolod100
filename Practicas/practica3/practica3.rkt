@@ -65,6 +65,19 @@
  (maximum 123.0 129.0)))
 
 ;Ejercicio 2 get-zone
+(define my-zones (zones 50 180));Constant defined for the exercise
+#|
+(define (get-zone s)
+  (define (aux sym lst)
+    [(empty? lst) error "The symbol is not in my-zones list"]
+    []
+   )
+  (cond
+    [(not (symbol? s)) error "The firs param is not a symbol"]
+    [else (aux s my-zones)]
+    )
+  )
+|#
 
 ;Ejercicio 3 bmp->zone
 
