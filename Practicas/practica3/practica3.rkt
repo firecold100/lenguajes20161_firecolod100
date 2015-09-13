@@ -131,6 +131,22 @@
 
 ;Ejercicio 10 nlBT
 
+(define (nlBT tree)
+  (cond
+    [(not (BTree? tree)) error "The first param is not of type BTree"]
+    [(EmptyBT? tree) 0]
+    [(and (EmptyBT? (BNode-l tree)) (EmptyBT? (BNode-r tree))) 1]
+    [else (+ (nlBT (BNode-l tree)) (nlBT(BNode-r tree)) )]))
+
+;;Tests
+#|
+(test (nlBT arb1) 1)
+(test (nlBT arb2) 2)
+(test (nlBT arb3) 4)
+(test (nlBT arb4) 8)
+(test (nlBT arbol-base) 4)
+|#
+
 ;Ejercicio 11 nnBT
 
 ;Ejercicio 12 mapBT
