@@ -112,6 +112,14 @@
 ;Ejercicio 8 collapse-trackpoints
 
 ;Ejercicio 9 ninBT
+(define (ninBT tree)
+  (cond
+    [(not (BTree? tree)) error "The first param is not of type tree"]
+    [(EmptyBT? tree) 0]
+    [(and (EmptyBT? (BNode-l tree)) (EmptyBT? (BNode-r tree))) 0]
+    [else (+ 1 (ninBT (BNode-l tree)) (ninBT (BNode-r tree)))]
+    )
+  )
 
 ;Ejercicio 10 nlBT
 
