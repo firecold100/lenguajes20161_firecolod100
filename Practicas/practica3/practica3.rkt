@@ -95,6 +95,12 @@
 
 ;Ejercicio 3 bmp->zone
 
+(define (bmp->zone lstf lstz)
+  (cond
+    [(not (list? lstf)) error "The first param is not a list"]
+    [(not (list? lstz)) error "The second param is not a list"]
+    [else "Not implemented yet"]))
+
 ;Ejercicio 4 create trackpoints
 
 ;Ejercicio 5 total-distance
