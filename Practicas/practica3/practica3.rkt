@@ -149,6 +149,23 @@
 
 ;Ejercicio 11 nnBT
 
+(define (nnBT tree)
+  (cond
+    [(not (BTree? tree)) error "The first param is not of type BTree"]
+    [(EmptyBT? tree) 0]
+    [(and (EmptyBT? (BNode-l tree)) (EmptyBT? (BNode-r tree))) 1]
+    [(EmptyBT? (BNode-l tree)) (+ 1 (nnBT (BNode-r tree)))]
+    [(EmptyBT? (BNode-l tree)) (+ 1 (nnBT (BNode-l tree)))]
+    [else  (+ (nnBT (BNode-l tree)) (nnBT (BNode-r tree))  1) ]))
+
+#|
+(test (nnBT arb1) 1)
+(test (nnBT arb2) 3)
+(test (nnBT arb3) 7)
+(test (nnBT arb4) 15)
+(test (nnBT arbol-base) 9)
+|#
+
 ;Ejercicio 12 mapBT
 
 ;Ejercicio 13 in-order, pre-order, pos-order.
