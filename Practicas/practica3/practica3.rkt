@@ -28,7 +28,9 @@
     [(not (number? max)) error "The second param is not of type number"]
     [else (aux 0 (- max rest) rest '())]))
 
-(test (zones 50 180) (list
+;;Tests
+
+#|(test (zones 50 180) (list
  (resting 50 114.0)
  (warm-up 115.0 127.0)
  (fat-burning 128.0 140.0)
@@ -63,20 +65,32 @@
  (aerobic 109.0 115.0)
  (anaerobic 116.0 122.0)
  (maximum 123.0 130.0)))
+|#
 
 ;Ejercicio 2 get-zone
 (define my-zones (zones 50 180));Constant defined for the exercise
-#|
-(define (get-zone s)
-  (define (aux sym lst)
-    [(empty? lst) error "The symbol is not in my-zones list"]
-    []
-   )
+
+(define (get-zone sym lst)
   (cond
-    [(not (symbol? s)) error "The firs param is not a symbol"]
-    [else (aux s my-zones)]
-    )
-  )
+    [(not (symbol? sym)) error "The first param is not a symbol"]
+    [(empty? lst) error "The symbol is not in my-zones list"]
+    [(and (eq? 'resting sym) (resting? (car lst))) (car lst)]
+    [(and (eq? 'warm-up sym) (warm-up? (car lst))) (car lst)]
+    [(and (eq? 'fat-burning sym) (fat-burning? (car lst))) (car lst)]
+    [(and (eq? 'aerobic sym) (aerobic? (car lst))) (car lst)]
+    [(and (eq? 'anaerobic sym) (anaerobic? (car lst))) (car lst)]
+    [(and (eq? 'maximum sym) (maximum? (car lst))) (car lst)]
+    [else (get-zone sym (cdr lst))]))
+
+;;Tests
+
+#|
+(test (get-zone 'resting my-zones) (resting 50 114.0))
+(test (get-zone 'warm-up my-zones) (warm-up 115.0 127.0))
+(test (get-zone 'fat-burning my-zones) (fat-burning 128.0 140.0))
+(test (get-zone 'aerobic my-zones) (aerobic 141.0 153.0))
+(test (get-zone 'anaerobic my-zones) (anaerobic 154.0 166.0))
+(test (get-zone 'maximum my-zones) (maximum 167.0 180.0))
 |#
 
 ;Ejercicio 3 bmp->zone
