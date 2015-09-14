@@ -29,8 +29,6 @@
     [else (aux 0 (- max rest) rest '())]))
 
 ;;Tests
-
-#|
 (test (zones 50 180) (list
  (resting 50 114.0)
  (warm-up 115.0 127.0)
@@ -66,7 +64,6 @@
  (aerobic 109.0 115.0)
  (anaerobic 116.0 122.0)
  (maximum 123.0 130.0)))
-|#
 
 ;Ejercicio 2 get-zone
 (define my-zones (zones 50 180));Constant defined for the exercise
@@ -85,14 +82,12 @@
 
 ;;Tests
 
-#|
 (test (get-zone 'resting my-zones) (resting 50 114.0))
 (test (get-zone 'warm-up my-zones) (warm-up 115.0 127.0))
 (test (get-zone 'fat-burning my-zones) (fat-burning 128.0 140.0))
 (test (get-zone 'aerobic my-zones) (aerobic 141.0 153.0))
 (test (get-zone 'anaerobic my-zones) (anaerobic 154.0 166.0))
 (test (get-zone 'maximum my-zones) (maximum 167.0 180.0))
-|#
 
 ;Ejercicio 3 bmp->zone
 
@@ -131,7 +126,6 @@
     [else (aux2 lstf lstz '())]))
 
 ;;Tests
-#|
 (test (bpm->zone '() '()) '())
 (test (bpm->zone '(50 117 130 150) my-zones) 
       (list (resting 50 114.0) 
@@ -150,7 +144,6 @@
         "No coincidences found"))
 (test (bpm->zone '(180) my-zones)
       (list (maximum 167.0 180.0)))
-|#
 
 ;Ejercicio 4 create trackpoints
 
@@ -172,13 +165,11 @@
     )
   )
 ;;Tests
-#|
 (test (ninBT arb1) 0)
 (test (ninBT arb2) 1)
 (test (ninBT arb3) 3)
 (test (ninBT arb4) 7)
 (test (ninBT arbol-base) 5)
-|#
 
 ;Ejercicio 10 nlBT
 
@@ -190,13 +181,11 @@
     [else (+ (nlBT (BNode-l tree)) (nlBT(BNode-r tree)) )]))
 
 ;;Tests
-#|
 (test (nlBT arb1) 1)
 (test (nlBT arb2) 2)
 (test (nlBT arb3) 4)
 (test (nlBT arb4) 8)
 (test (nlBT arbol-base) 4)
-|#
 
 ;Ejercicio 11 nnBT
 
@@ -209,13 +198,11 @@
     [(EmptyBT? (BNode-l tree)) (+ 1 (nnBT (BNode-l tree)))]
     [else  (+ (nnBT (BNode-l tree)) (nnBT (BNode-r tree))  1) ]))
 
-#|
 (test (nnBT arb1) 1)
 (test (nnBT arb2) 3)
 (test (nnBT arb3) 7)
 (test (nnBT arb4) 15)
 (test (nnBT arbol-base) 9)
-|#
 
 ;Ejercicio 12 mapBT
 
