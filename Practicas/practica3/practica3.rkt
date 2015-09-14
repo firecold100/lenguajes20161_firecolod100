@@ -30,7 +30,8 @@
 
 ;;Tests
 
-#|(test (zones 50 180) (list
+#|
+(test (zones 50 180) (list
  (resting 50 114.0)
  (warm-up 115.0 127.0)
  (fat-burning 128.0 140.0)
@@ -95,11 +96,61 @@
 
 ;Ejercicio 3 bmp->zone
 
-(define (bmp->zone lstf lstz)
+(define (bpm->zone lstf lstz)
+  (define (aux1 frec lst)
+   (cond
+     [(empty? lst) "No coincidences found"]
+     [(and (resting? (car lst)) 
+           (<= (resting-low (car lst)) frec) 
+           (>= (resting-high (car lst)) frec)) (car lst)]
+     [(and (warm-up? (car lst)) 
+           (<= (warm-up-low (car lst)) frec) 
+           (>= (warm-up-high (car lst)) frec)) (car lst)]
+     [(and (fat-burning? (car lst)) 
+           (<= (fat-burning-low (car lst)) frec) 
+           (>= (fat-burning-high (car lst)) frec)) (car lst)]
+     [(and (aerobic? (car lst)) 
+           (<= (aerobic-low (car lst)) frec) 
+           (>= (aerobic-high (car lst)) frec)) (car lst)]
+     [(and (anaerobic? (car lst)) 
+           (<= (anaerobic-low (car lst)) frec) 
+           (>= (anaerobic-high (car lst)) frec)) (car lst)]
+     [(and (maximum? (car lst)) 
+           (<= (maximum-low (car lst)) frec) 
+           (>= (maximum-high (car lst)) frec)) (car lst)]
+     [else (aux1 frec (cdr lst))]
+    ))
+  (define (aux2 lstf lstz mzones) ;lstf:- list of frecuencies. lstz:-list of zones. mzones:- list of zones of coincidence
+    (cond
+        [(empty? lstf) '()]
+        [else (append (list (aux1 (car lstf) lstz)) (aux2 (cdr lstf) lstz mzones) )]
+     ))
   (cond
     [(not (list? lstf)) error "The first param is not a list"]
     [(not (list? lstz)) error "The second param is not a list"]
-    [else "Not implemented yet"]))
+    [else (aux2 lstf lstz '())]))
+
+;;Tests
+#|
+(test (bpm->zone '() '()) '())
+(test (bpm->zone '(50 117 130 150) my-zones) 
+      (list (resting 50 114.0) 
+            (warm-up 115.0 127.0) 
+            (fat-burning 128.0 140.0) 
+            (aerobic 141.0 153.0)))
+(test (bpm->zone '(50 60 70 80) my-zones)
+      (list (resting 50 114.0) 
+            (resting 50 114.0) 
+            (resting 50 114.0) 
+            (resting 50 114.0)))
+(test (bpm->zone '(50 60 70 80) '())
+      '("No coincidences found" 
+        "No coincidences found" 
+        "No coincidences found" 
+        "No coincidences found"))
+(test (bpm->zone '(180) my-zones)
+      (list (maximum 167.0 180.0)))
+|#
 
 ;Ejercicio 4 create trackpoints
 
