@@ -1,7 +1,7 @@
 #lang plai
 
 (require "practica3-base.rkt")
-
+;(print-only-errors true)
 ;Ejercicio 1 zones
 (define (zones rest max)
   (define (aux i range rest lstzones);Begin of auxiliar function
@@ -113,13 +113,11 @@
      [(and (maximum? (car lst)) 
            (<= (maximum-low (car lst)) frec) 
            (>= (maximum-high (car lst)) frec)) (car lst)]
-     [else (aux1 frec (cdr lst))]
-    ))
+     [else (aux1 frec (cdr lst))]))
   (define (aux2 lstf lstz mzones) ;lstf:- list of frecuencies. lstz:-list of zones. mzones:- list of zones of coincidence
     (cond
         [(empty? lstf) '()]
-        [else (append (list (aux1 (car lstf) lstz)) (aux2 (cdr lstf) lstz mzones) )]
-     ))
+        [else (append (list (aux1 (car lstf) lstz)) (aux2 (cdr lstf) lstz mzones) )]))
   (cond
     [(not (list? lstf)) error "The first param is not a list"]
     [(not (list? lstz)) error "The second param is not a list"]
@@ -207,3 +205,27 @@
 ;Ejercicio 12 mapBT
 
 ;Ejercicio 13 in-order, pre-order, pos-order.
+
+;;in-order
+
+(define (in-order tree)
+  (cond
+    [(not (BTree? tree)) error "The first param is not of type BTree"]
+    [(EmptyBT? tree) '()]
+    [else (append (in-order (BNode-l tree)) (list (BNode-e tree)) (in-order (BNode-r tree)))]))
+
+
+;;per-order
+(define (pre-order tree)
+  (cond
+    [(not (BTree? tree)) error "The first param is not of type BTree"]
+    [(EmptyBT? tree) '()]
+    [else (append (list (BNode-e tree)) (pre-order (BNode-l tree)) (pre-order (BNode-r tree)))]))
+
+
+;;pos-order
+(define (pos-order tree)
+  (cond
+    [(not (BTree? tree)) error "The first param is not of type BTree"]
+    [(EmptyBT? tree) '()]
+    [else (append (pos-order (BNode-l tree)) (pos-order (BNode-r tree))  (list (BNode-e tree)) )]))
