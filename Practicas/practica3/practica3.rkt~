@@ -144,20 +144,6 @@
       (list (maximum 167.0 180.0)))
 
 ;Ejercicio 4 create trackpoints
-(define (create-trackpoints raw-data-lst zones-lst)
-  (define (create-trackpoint raw zones-lst)
-    (trackpoint (GPS (first (second raw)) (second (second raw))) (third raw) (car (bpm->zone (list (third raw)) zones-lst)) (first raw)))
-  (cond
-    [(empty? raw-data-lst) empty]
-    [else (append (list (create-trackpoint (car raw-data-lst) zones-lst)) 
-                  (create-trackpoints (cdr raw-data-lst) zones-lst))]))
-;;Tests
-(test (create-trackpoints (take raw-data 4) my-zones)
-      (list
-       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619654)
-       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619655)
-       (trackpoint (GPS 19.4907258 -99.24101) 108 (resting 50 114.0) 1425619658)
-       (trackpoint (GPS 19.4907107 -99.2410833) 106 (resting 50 114.0) 1425619662)))
 
 ;Ejercicio 5 total-distance
 
