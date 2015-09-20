@@ -280,6 +280,22 @@
 
 ;Ejercicio 12 mapBT
 
+(define (mapBT fun tree)
+  (cond
+    [(EmptyBT? tree) (EmptyBT)]
+    [else (BNode < (mapBT fun (BNode-l tree)) (fun (BNode-e tree)) (mapBT fun (BNode-r tree)))]))
+
+;;Tests
+(test (mapBT add1 (EmptyBT)) (EmptyBT))
+(test (mapBT add1 (BNode < (EmptyBT) 1 (BNode < (EmptyBT) 2 (EmptyBT))))
+      (BNode < (EmptyBT) 2 (BNode < (EmptyBT) 3 (EmptyBT))))
+(test (mapBT (lambda (x) (* x x)) (BNode < (EmptyBT) 3 (BNode < (EmptyBT) 2 (EmptyBT))))
+      (BNode < (EmptyBT) 9 (BNode < (EmptyBT) 4 (EmptyBT))))
+(test (mapBT (lambda (x) (* x 2)) (BNode < (EmptyBT) 3 (BNode < (EmptyBT) 2 (EmptyBT))))
+      (BNode < (EmptyBT) 6 (BNode < (EmptyBT) 4 (EmptyBT))))
+(test (mapBT sqrt (BNode < (BNode < (EmptyBT) 4 (EmptyBT)) 9 (BNode < (EmptyBT) 16 (EmptyBT))))
+      (BNode < (BNode < (EmptyBT) 2 (EmptyBT)) 3 (BNode < (EmptyBT) 4 (EmptyBT))))
+
 ;Ejercicio 13 in-order, pre-order, pos-order.
 
 ;;in-order
@@ -305,5 +321,3 @@
     [(not (BTree? tree)) error "The first param is not of type BTree"]
     [(EmptyBT? tree) '()]
     [else (append (pos-order (BNode-l tree)) (pos-order (BNode-r tree))  (list (BNode-e tree)) )]))
-
-(collapse-trackpoints (create-trackpoints (take raw-data 4) my-zones) 0.01)
