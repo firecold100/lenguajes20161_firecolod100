@@ -181,12 +181,6 @@
        (trackpoint (GPS 19.4906865 -99.241445) 120 (warm-up 115.0 127.0) 1425619685)))
 
 ;Ejercicio 5 total-distance
-
-;Ejercicio 6 avarage-hr
-
-;Ejercicio 7 max-hr
-
-;Ejercicio 8 collapse-trackpoints
 (define (degtorad n)
   [* n (/ pi 180)])
 
@@ -211,6 +205,26 @@
                  [result (* 2 r (asin (sqrt b)))])
             result)]))
 
+(define (total-distance lst)
+  (define (distancias gps1 gps-lst)
+    (cond
+      [(empty? gps-lst) 0]
+      [else (+ (haversine (trackpoint-loc gps1) (trackpoint-loc (car gps-lst))) (distancias (car gps-lst) (cdr gps-lst)))]))
+  (cond
+    [(empty? lst) 0]
+    [else (distancias (car lst) (cdr lst))]))
+
+(test (total-distance (create-trackpoints (take raw-data 100) my-zones)) 0.9509291243812747)
+(test (total-distance (create-trackpoints raw-data my-zones)) 5.051934549322941)
+(test (total-distance (create-trackpoints (take raw-data 10) my-zones)) 0.057104023456293194)
+(test (total-distance (create-trackpoints (take raw-data 1) my-zones)) 0)
+(test (total-distance (create-trackpoints (take raw-data 4) my-zones)) 0.00785990254990468)
+
+;Ejercicio 6 avarage-hr
+
+;Ejercicio 7 max-hr
+
+;Ejercicio 8 collapse-trackpoints
 (define (collapse-trackpoints lst e)
   (define (collapse pas lst trackp e)
     (cond
@@ -222,11 +236,29 @@
     [(empty? lst) empty]
     [else (collapse '() (collapse-trackpoints (cdr lst) e) (car lst) e)]))
 
+;;Tests
 (test (collapse-trackpoints (create-trackpoints (take raw-data 4) my-zones) 0.01)
       (list
        (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619655)
        (trackpoint (GPS 19.4907258 -99.24101) 108 (resting 50 114.0) 1425619658)
        (trackpoint (GPS 19.4907107 -99.2410833) 106 (resting 50 114.0) 1425619662)))
+(test (collapse-trackpoints (create-trackpoints (take raw-data 2) my-zones) 0.7)
+      (list (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619655)))
+(test (collapse-trackpoints '() 0) '())
+(test (collapse-trackpoints (create-trackpoints (take raw-data 3) my-zones) 0.21)
+      (list
+       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619655)
+       (trackpoint (GPS 19.4907258 -99.24101) 108 (resting 50 114.0) 1425619658)))
+(test (collapse-trackpoints (create-trackpoints (take raw-data 10) my-zones) 1.1)
+      (list
+       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619655)
+       (trackpoint (GPS 19.4907258 -99.24101) 108 (resting 50 114.0) 1425619658)
+       (trackpoint (GPS 19.4907107 -99.2410833) 106 (resting 50 114.0) 1425619662)
+       (trackpoint (GPS 19.4907086 -99.2411981) 111 (resting 50 114.0) 1425619671)
+       (trackpoint (GPS 19.4907059 -99.2412562) 112 (resting 50 114.0) 1425619675)
+       (trackpoint (GPS 19.4906902 -99.2413796) 115 (warm-up 115.0 127.0) 1425619681)
+       (trackpoint (GPS 19.4906865 -99.241445) 120 (warm-up 115.0 127.0) 1425619685)
+       (trackpoint (GPS 19.4906861 -99.2415517) 119 (warm-up 115.0 127.0) 1425619690)))
 
 
 ;Ejercicio 9 ninBT
