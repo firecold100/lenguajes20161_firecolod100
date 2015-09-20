@@ -71,7 +71,8 @@
 (define (get-zone sym lst)
   (cond
     [(not (symbol? sym)) error "The first param is not a symbol"]
-    [(empty? lst) error "The symbol is not in my-zones list"]
+    [(not (list? lst)) error "The second param is not of type list"]
+    [(empty? lst) error "The symbol is not in the given list of zones"]
     [(and (eq? 'resting sym) (resting? (car lst))) (car lst)]
     [(and (eq? 'warm-up sym) (warm-up? (car lst))) (car lst)]
     [(and (eq? 'fat-burning sym) (fat-burning? (car lst))) (car lst)]
@@ -81,7 +82,7 @@
     [else (get-zone sym (cdr lst))]))
 
 ;;Tests
-
+(test (get-zone 'resting '()) "The symbol is not in the given list of zones") ;;Base case
 (test (get-zone 'resting my-zones) (resting 50 114.0))
 (test (get-zone 'warm-up my-zones) (warm-up 115.0 127.0))
 (test (get-zone 'fat-burning my-zones) (fat-burning 128.0 140.0))
@@ -89,7 +90,7 @@
 (test (get-zone 'anaerobic my-zones) (anaerobic 154.0 166.0))
 (test (get-zone 'maximum my-zones) (maximum 167.0 180.0))
 
-;Ejercicio 3 bmp->zone
+;Ejercicio 3 bpm->zone
 
 (define (bpm->zone lstf lstz)
   (define (aux1 frec lst)
@@ -148,6 +149,8 @@
   (define (create-trackpoint raw zones-lst)
     (trackpoint (GPS (first (second raw)) (second (second raw))) (third raw) (car (bpm->zone (list (third raw)) zones-lst)) (first raw)))
   (cond
+    [(not (list? raw-data-lst)) error "The first param is not of type list"]
+    [(not (list? zones-lst)) error "The second param is not of type list"]
     [(empty? raw-data-lst) empty]
     [else (append (list (create-trackpoint (car raw-data-lst) zones-lst)) 
                   (create-trackpoints (cdr raw-data-lst) zones-lst))]))
@@ -211,6 +214,7 @@
       [(empty? gps-lst) 0]
       [else (+ (haversine (trackpoint-loc gps1) (trackpoint-loc (car gps-lst))) (distancias (car gps-lst) (cdr gps-lst)))]))
   (cond
+    [(not (list? lst)) error "The first param is not of type list"]
     [(empty? lst) 0]
     [else (distancias (car lst) (cdr lst))]))
 
@@ -233,6 +237,8 @@
             (append pas lst)
             (collapse (append pas (list (car lst))) (cdr lst) trackp e))]))
   (cond
+    [(not (list? lst)) error "The first param is not of type list"]
+    [(not (number? e)) error "The second param is not of type number"]
     [(empty? lst) empty]
     [else (collapse '() (collapse-trackpoints (cdr lst) e) (car lst) e)]))
 
@@ -264,13 +270,14 @@
 ;Ejercicio 9 ninBT
 (define (ninBT tree)
   (cond
-    [(not (BTree? tree)) error "The first param is not of type tree"]
+    [(not (BTree? tree)) error "The first param is not of type BTree"]
     [(EmptyBT? tree) 0]
     [(and (EmptyBT? (BNode-l tree)) (EmptyBT? (BNode-r tree))) 0]
     [else (+ 1 (ninBT (BNode-l tree)) (ninBT (BNode-r tree)))]
     )
   )
 ;;Tests
+(test (ninBT ebt) 0) ;;Base case
 (test (ninBT arb1) 0)
 (test (ninBT arb2) 1)
 (test (ninBT arb3) 3)
@@ -287,6 +294,7 @@
     [else (+ (nlBT (BNode-l tree)) (nlBT(BNode-r tree)) )]))
 
 ;;Tests
+(test (nlBT ebt) 0) ;;Base case
 (test (nlBT arb1) 1)
 (test (nlBT arb2) 2)
 (test (nlBT arb3) 4)
@@ -301,9 +309,11 @@
     [(EmptyBT? tree) 0]
     [(and (EmptyBT? (BNode-l tree)) (EmptyBT? (BNode-r tree))) 1]
     [(EmptyBT? (BNode-l tree)) (+ 1 (nnBT (BNode-r tree)))]
-    [(EmptyBT? (BNode-l tree)) (+ 1 (nnBT (BNode-l tree)))]
+    [(EmptyBT? (BNode-r tree)) (+ 1 (nnBT (BNode-l tree)))]
     [else  (+ (nnBT (BNode-l tree)) (nnBT (BNode-r tree))  1) ]))
 
+;;Tests
+(test (nnBT ebt) 0) ;;Base case
 (test (nnBT arb1) 1)
 (test (nnBT arb2) 3)
 (test (nnBT arb3) 7)
@@ -314,6 +324,7 @@
 
 (define (mapBT fun tree)
   (cond
+    [(not (BTree? tree)) error "The second param is not of type BTree"]
     [(EmptyBT? tree) (EmptyBT)]
     [else (BNode < (mapBT fun (BNode-l tree)) (fun (BNode-e tree)) (mapBT fun (BNode-r tree)))]))
 
@@ -338,6 +349,14 @@
     [(EmptyBT? tree) '()]
     [else (append (in-order (BNode-l tree)) (list (BNode-e tree)) (in-order (BNode-r tree)))]))
 
+;;Tests
+(test (in-order ebt) '()) ;;Base case
+(test (in-order arb1) '(1))
+(test (in-order arb2) '(1 2 1))
+(test (in-order arb3) '(1 2 1 3 1 2 1))
+(test (in-order arb4) '(1 2 1 3 1 2 1 4 1 2 1 3 1 2 1))
+(test (in-order arbol-base) '("A" "B" "C" "D" "E" "F" "G" "H" "I"))
+
 
 ;;per-order
 (define (pre-order tree)
@@ -346,6 +365,13 @@
     [(EmptyBT? tree) '()]
     [else (append (list (BNode-e tree)) (pre-order (BNode-l tree)) (pre-order (BNode-r tree)))]))
 
+;;Tests
+(test (pre-order ebt) '()) ;;Base case
+(test (pre-order arb1) '(1))
+(test (pre-order arb2) '(2 1 1))
+(test (pre-order arb3) '(3 2 1 1 2 1 1))
+(test (pre-order arb4) '(4 3 2 1 1 2 1 1 3 2 1 1 2 1 1))
+(test (pre-order arbol-base) '("F" "B" "A" "D" "C" "E" "G" "I" "H"))
 
 ;;pos-order
 (define (pos-order tree)
@@ -353,3 +379,11 @@
     [(not (BTree? tree)) error "The first param is not of type BTree"]
     [(EmptyBT? tree) '()]
     [else (append (pos-order (BNode-l tree)) (pos-order (BNode-r tree))  (list (BNode-e tree)) )]))
+
+;;Tests
+(test (pos-order ebt) '()) ;;Base case
+(test (pos-order arb1) '(1))
+(test (pos-order arb2) '(1 1 2))
+(test (pos-order arb3) '(1 1 2 1 1 2 3))
+(test (pos-order arb4) '(1 1 2 1 1 2 3 1 1 2 1 1 2 3 4))
+(test (pos-order arbol-base) '("A" "C" "E" "D" "B" "H" "I" "G" "F"))
