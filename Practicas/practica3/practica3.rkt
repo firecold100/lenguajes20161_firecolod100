@@ -152,12 +152,33 @@
     [else (append (list (create-trackpoint (car raw-data-lst) zones-lst)) 
                   (create-trackpoints (cdr raw-data-lst) zones-lst))]))
 ;;Tests
+(test (create-trackpoints (take raw-data 1) my-zones)
+      (list (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619654)))
+(test (create-trackpoints (take raw-data 2) my-zones)
+      (list
+       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619654)
+       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619655)))
 (test (create-trackpoints (take raw-data 4) my-zones)
       (list
        (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619654)
        (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619655)
        (trackpoint (GPS 19.4907258 -99.24101) 108 (resting 50 114.0) 1425619658)
        (trackpoint (GPS 19.4907107 -99.2410833) 106 (resting 50 114.0) 1425619662)))
+(test (create-trackpoints (take raw-data 5) my-zones)
+      (list
+       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619654)
+       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619655)
+       (trackpoint (GPS 19.4907258 -99.24101) 108 (resting 50 114.0) 1425619658)
+       (trackpoint (GPS 19.4907107 -99.2410833) 106 (resting 50 114.0) 1425619662)
+       (trackpoint (GPS 19.4907086 -99.2411981) 111 (resting 50 114.0) 1425619671)))
+(test (create-trackpoints (cdr (cdr (cdr (take raw-data 9)))) my-zones)
+      (list
+       (trackpoint (GPS 19.4907107 -99.2410833) 106 (resting 50 114.0) 1425619662)
+       (trackpoint (GPS 19.4907086 -99.2411981) 111 (resting 50 114.0) 1425619671)
+       (trackpoint (GPS 19.4907059 -99.2412562) 112 (resting 50 114.0) 1425619675)
+       (trackpoint (GPS 19.490702 -99.2413217) 115 (warm-up 115.0 127.0) 1425619678)
+       (trackpoint (GPS 19.4906902 -99.2413796) 115 (warm-up 115.0 127.0) 1425619681)
+       (trackpoint (GPS 19.4906865 -99.241445) 120 (warm-up 115.0 127.0) 1425619685)))
 
 ;Ejercicio 5 total-distance
 
@@ -166,6 +187,47 @@
 ;Ejercicio 7 max-hr
 
 ;Ejercicio 8 collapse-trackpoints
+(define (degtorad n)
+  [* n (/ pi 180)])
+
+(define (haversine gps1 gps2)
+  (cond
+    [(not (GPS? gps1)) error "The first param is not of type GPS" ]
+    [(not (GPS? gps2)) error "The second param is not of type GPS" ]
+    [else (let* ([lat1 (degtorad (GPS-lat gps1))] ;We convert from degrees to radians the param lat of "the object" gps1
+                 [long1 (degtorad (GPS-long gps1))] ;We convert from degrees to radians the param long of "the object" gps1
+                 [lat2 (degtorad(GPS-lat gps2))] ;We convert from degrees to radians the param lat of "the object" gps2
+                 [long2 (degtorad(GPS-long gps2))] ;We convert from degrees to radians the param long of "the object" gps2
+                 [deltalat (- lat2 lat1)] ;Difference between two latitudes
+                 [deltalong (- long2 long1)] ;Difference between two lengths
+                 [a (* (sin (/ deltalat 2)) (sin (/ deltalat 2)) )];square of sin(Δlat/2)
+                 [t1 (cos lat1)] ;Cosine of latitude 1
+                 [t2 (cos lat2)] ; Cosine of latitude 2
+                 [t3 (* (sin (/ deltalong 2)) (sin (/ deltalong 2)))] ;square of sin(Δlong/2)
+                 [t (* t1 t2 t3)]; multiplication of t1, t2 and t3
+                 [b (+ a t)] ;Sum of a and t
+                 [r 6367] ;Radius of earth
+                 [raiz (sqrt b)] ;The "big root" in formula
+                 [result (* 2 r (asin (sqrt b)))])
+            result)]))
+
+(define (collapse-trackpoints lst e)
+  (define (collapse pas lst trackp e)
+    (cond
+      [(empty? lst) (append (list trackp) pas)]
+      [(if (and (< (haversine (trackpoint-loc (car lst)) (trackpoint-loc trackp)) e) (eq? (trackpoint-hr (car lst)) (trackpoint-hr trackp)))
+            (append pas lst)
+            (collapse (append pas (list (car lst))) (cdr lst) trackp e))]))
+  (cond
+    [(empty? lst) empty]
+    [else (collapse '() (collapse-trackpoints (cdr lst) e) (car lst) e)]))
+
+(test (collapse-trackpoints (create-trackpoints (take raw-data 4) my-zones) 0.01)
+      (list
+       (trackpoint (GPS 19.4907258 -99.24101) 104 (resting 50 114.0) 1425619655)
+       (trackpoint (GPS 19.4907258 -99.24101) 108 (resting 50 114.0) 1425619658)
+       (trackpoint (GPS 19.4907107 -99.2410833) 106 (resting 50 114.0) 1425619662)))
+
 
 ;Ejercicio 9 ninBT
 (define (ninBT tree)
@@ -243,3 +305,5 @@
     [(not (BTree? tree)) error "The first param is not of type BTree"]
     [(EmptyBT? tree) '()]
     [else (append (pos-order (BNode-l tree)) (pos-order (BNode-r tree))  (list (BNode-e tree)) )]))
+
+(collapse-trackpoints (create-trackpoints (take raw-data 4) my-zones) 0.01)
