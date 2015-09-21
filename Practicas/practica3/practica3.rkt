@@ -2,6 +2,7 @@
 
 (require "practica3-base.rkt")
 ;(print-only-errors true)
+
 ;Ejercicio 1 zones
 (define (zones rest max)
   (define (aux i range rest lstzones);Begin of auxiliar function
@@ -225,8 +226,52 @@
 (test (total-distance (create-trackpoints (take raw-data 4) my-zones)) 0.00785990254990468)
 
 ;Ejercicio 6 avarage-hr
+(define trackpoints (create-trackpoints (take raw-data 120) my-zones))
+(define trackpoints2 (create-trackpoints raw-data my-zones))
+(define sample (create-trackpoints (take raw-data 100) my-zones))
+(define sample2 (create-trackpoints (take raw-data 50) my-zones))
+
+(define (average-hr lst)
+  (if (empty? lst) ;test-expre
+      0            ;then-expre
+      ;redondeamos la division
+      (round(/ (suma lst) (length lst)))));else-expr
+
+(define (suma lst)
+  (cond
+    [(empty? lst) 0]
+    [else    
+     (define est (type-case Frame (car lst)
+       [trackpoint (loc hr zone time) hr]))
+     (+ est (suma (cdr lst)))]))
+
+(test (average-hr empty) 0)
+(test (average-hr trackpoints) 136)
+(test (average-hr trackpoints2) 150)
+(test (average-hr sample) 134)
+(test (average-hr sample2) 128)
 
 ;Ejercicio 7 max-hr
+
+(define (max-hr lst)
+  (if (empty? lst) ;test-expre
+      0            ;then-expre
+      ;aplicamos el maximo a la lista generada
+      (apply max (generaList lst))));else-expr
+
+(define (generaList lst2)
+  (cond
+    [(empty? lst2) empty]
+    [else
+     (define est (type-case Frame (car lst2)
+       [trackpoint (loc hr zone unix-time) hr]))
+     (cons est (generaList (cdr lst2)))]))
+
+(test (max-hr empty) 0)
+(test (max-hr trackpoints) 148)
+(test (max-hr trackpoints2) 165)
+(test (max-hr sample) 147)
+(test (max-hr sample2) 136)
 
 ;Ejercicio 8 collapse-trackpoints
 (define (collapse-trackpoints lst e)
