@@ -22,10 +22,62 @@ Responde las siguientes preguntas.
 
 \begin{itemize}
 \item Provee un esquema para un programa que ilustre la no-linealidad de la implementación de ambientes basada en un stack. Explica brevemente porque su ejecución en tiempo no es lineal con respecto al tamaño de su entrada.
+
+\begin{verbatim}
+{with {x 5} 
+    {with {y 6}
+        { with{z 5} 
+            {with{w 4} 
+                (+ x (+ y (+ z w)))}}}}
+
+La ejecución de esta expresión no es lineal debido a que por cada asignación 
+de variable, esta se tiene que buscar en el ambiente, y como buscar en el ambiente 
+cuesta O(n) y esta operación se se debe hacer con respecto al número de variables, 
+que es n, entonces la complejidad es O(n²)
+\end{verbatim}
+
 \item Describe una estructura de datos para un ambiente que un interprete de FWAE pueda usar para mejorar su
 complejidad
+
+\begin{verbatim}
+Una estructura de datos que puede ocupar el intérprete para que 
+la complejidad mejore es un Diccionario, mejor conocido como "Tabla hash".
+
+Al meter cada uno de los valores en el ambiente se crean instancias llave-valor 
+y la complejidad de acceso cada uno de los elementos del ambiente es de O(1)
+en lugar de que fuera O(n) buscando una por una cada actualización.
+\end{verbatim}
+
 \item Muestra como usaría el interpreté esta nueva estructura de datos.
+
+\begin{verbatim}
+(define (interp expr hash);; en lugar de env, el nombre hash de hash-table
+  (type-case FAE expr
+    [num (n) (numV n)]
+    [add (l r) (num+ (interp l hash) (interp r hash))]
+    [sub (l r) (num- (interp l hash) (interp r hash))]
+    [id (v) (hash-getVal v hash)] ;;Cambie esto. El Hash-getVal es O(1)
+    [fun (bound-id bound-body)
+         (closureV bound-id bound-body hash)]
+    [app (fun-expr arg-expr)
+         (local ([define fun-val (interp fun-expr hash)])
+           (if (closureV? fun-val)
+               (interp (closureV-body fun-val)
+                       (aSub (closureV-param fun-val)
+                             (interp arg-expr hash)
+                             (closureV-env fun-val)))
+               (error 'interp (string-append (~a fun-expr) " expression is not a function"))))]))
+\end{verbatim}
 \item Indica cual es la nueva complejidad del interprete (análisis del peor caso) y de forma informal pero rigurosa pruébalo.
+
+\begin{verbatim}
+La función lookup, que era la que checaba si estaba o no en el ambiente, ahora es 
+reemplazada por la función que se encarga de extraer del hash el valor del id. 
+Y como este es de acceso O(1) y como cada id (si se consideran n id's) se tiene que 
+buscar el valor del id por cada id, por lo tanto la complejidad
+en el peor caso sería O(n).
+\end{verbatim}
+
 \end{itemize}
 
 
@@ -45,9 +97,30 @@ el valor mas viejo de x en el ambiente en vez del nuevo y para este ejemplo el t
 
 \begin{itemize}
 \item ¿ Lo que dice Ben esta bien en general? si es el caso justifícalo.
-añdkñaldkñd
 \item Si Ben esta equivocado entonces da un programa de contraejemplo y explica por que la estrategia de evaluación de Ben podría producir una respuesta incorrecta
 \end{itemize}
+
+\begin{verbatim}
+Sí esta bien en general ya que se recomienda que los nombres de las variables 
+no se repitan para evitar confusiones o modificaciones en como manejar los 
+ambientes del interp y obtener el valor deseado, por lo que las variables se 
+declararían una sola vez así no habría problemas al buscar su valor.
+Pero hay muchas expresiones que no tienen problemas al tener el mismo nombre
+de las variables osea que ese general sí tendría problemas si se evalua con 
+el algoritmo de Ben y los nombres de las variables se repiten.
+\end{verbatim}
+
+
+\begin{verbatim}
+{with {x 2} 
+      {with {x 3} 
+            {+ x {with {foo {fun {y} {+ 5 y}}}
+                       {with {x 5} 
+                             {foo x}}}}}}
+                             
+En este caso podemos ver que el programa no tiene problemas al evaluarse en el 
+interp, devuelve (num 13), pero si lo hacemos con el algoritmo de Ben nos da (num 9)
+\end{verbatim}
 
 \section{Problema III}
 Dada la siguiente expresión de FWAE con with multi-parametrico:
@@ -61,6 +134,13 @@ Dada la siguiente expresión de FWAE con with multi-parametrico:
 \item Da la forma Bruijn de la expresión anterior
 \item Realiza la corrida de esta expresión, es decir escribe explícitamente cada una de las llamadas tanto para subst y interp, escribiendo además los resultados parciales en sintaxis concreta.
 \end{itemize}
+
+\begin{verbatim}
+{with {5 {fun {x} {fun {y} {+ x y}}}  3}
+      {with {10 {<:0 1> <:0 0>}}
+            {<:0 1> {with {{+ 10 <:1 2>} {<:0 1> 0}}
+                  {+ {+ <:0 1> <:0 0>} <:2 2>}}}}}
+\end{verbatim}
 
 \begin{verbatim}
 ;;Primero hacemos el parse
