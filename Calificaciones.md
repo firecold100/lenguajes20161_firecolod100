@@ -6,4 +6,12 @@
 
 Evita llamadas de mreverse en tus funciones.
 
-**Calificacion: 10**
+**Calificación: 10**
+
+
+### Practica 2
+
+La implementación de la función printML es erronea no estan
+imprimiendo las listas anidadas correctamente
+
+**Calificación: 9.5**
