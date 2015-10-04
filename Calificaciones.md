@@ -15,3 +15,10 @@ La implementación de la función printML es erronea no estan
 imprimiendo las listas anidadas correctamente
 
 **Calificación: 9.5**
+
+### Practica 3
+
+Muy bien, solamente no me cambien los nombres de las funciones
+hicieron eso en las funciones de recorrido de los arboles BTree.
+
+**Calificación: 10**
