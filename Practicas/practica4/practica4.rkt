@@ -6,8 +6,16 @@
 
 ;;Ejercicio 1 desugar
 (define (desugar expr)
-  ;; Implementar desugar
-  (error 'desugar "Not implemented"))
+  (type-case FAES expr
+    [idS (s) (id s)]
+    [numS (n) (num n)]
+    [withS (l body) (app l (desugar body))]
+    [with*S (b body) (app b (desugar body))]
+    [funS (params body) (fun params (desugar body))]
+    [appS (f a) (app (desugar f) (map desugar a))]
+    [binopS (o l r) (binop o 
+                           (desugar l)
+                           (desugar r))]))
 
 
 (test (desugar (parse '{+ 3 4})) (binop + (num 3) (num 4)))
