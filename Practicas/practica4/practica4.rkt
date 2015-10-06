@@ -9,8 +9,12 @@
   (type-case FAES expr
     [idS (s) (id s)]
     [numS (n) (num n)]
-    [withS (l body) (app l (desugar body))]
-    [with*S (b body) (app b (desugar body))]
+    [withS (bindings body) (app (fun (map (lambda (x) (bind-name x)) bindings)
+                                     (desugar body))
+                                (list (desugar (bind-val (car bindings)))))]
+    [with*S (bindings body) (app (fun (map (lambda (x) (bind-name x)) bindings)
+                                     (desugar body))
+                                (map (lambda (x) (desugar (bind-val x))) bindings))]
     [funS (params body) (fun params (desugar body))]
     [appS (f a) (app (desugar f) (map desugar a))]
     [binopS (o l r) (binop o 
