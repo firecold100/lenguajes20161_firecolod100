@@ -9,13 +9,13 @@
   (type-case FAES expr
     [idS (s) (id s)]
     [numS (n) (num n)]
-    [withS (bindings body) (app (fun (map (lambda (x) (bind-name x)) bindings)
-                                     (desugar body))
-                                (list (desugar (bind-val (car bindings)))))]
-    [with*S (bindings body) (app (fun (map (lambda (x) (bind-name x)) bindings)
-                                     (desugar body))
-                                (map (lambda (x) (desugar (bind-val x))) bindings))]
-    [funS (params body) (fun params (desugar body))]
+    [withS (l b) (app (fun (map (lambda (x) (bind-name x)) l)
+                                     (desugar b))
+                                (list (desugar (bind-val (car l)))))]
+    [with*S (l b) (app (fun (map (lambda (x) (bind-name x)) l)
+                                     (desugar b))
+                                (map (lambda (x) (desugar (bind-val x))) l))]
+    [funS (p b) (fun p (desugar b))]
     [appS (f a) (app (desugar f) (map desugar a))]
     [binopS (o l r) (binop o 
                            (desugar l)
@@ -33,10 +33,19 @@
 
 ;;Ejercicio 3 with*
 
+(define (opbin op l r)
+  (cond
+    [(numV (op (numV-n l) (numV-n r)))]))
+(define (lookup name env)
+  (env name))
 ;;Ejercicio 4 interp
 (define (interp expr env)
-  ;; Implementar interp
-  (error 'interp "Not implemented"))
+  (type-case FAE expr
+  [num (n) (numV n)]
+  [id (name) (lookup name env)]
+  [fun (params body) (closureV params body env)]
+  [app (fun args) '()]
+  [binop (f l r) (opbin f (rinterp l) (rinterp r))]))
 
 (define (rinterp expr)
   (interp expr (mtSub)))
