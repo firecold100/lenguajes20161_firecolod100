@@ -22,3 +22,12 @@ Muy bien, solamente no me cambien los nombres de las funciones
 hicieron eso en las funciones de recorrido de los arboles BTree.
 
 **Calificación: 10**
+
+
+## Tareas
+
+### Tarea 2
+
+No entregaron nada :(.
+
+**Calificación: 0**
