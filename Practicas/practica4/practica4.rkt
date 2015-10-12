@@ -36,25 +36,26 @@
 (define (cparse sexp)
   (desugar (parse sexp)))
 
-(define (opbin op l r)
+(define (opbin op l r env)
   (cond
-    [(numV (op (numV-n l) (numV-n r)))]))
+    [(numV (op (numV-n (interp l env)) (numV-n (interp r env))))]))
+
 (define (lookup name env)
   (cond
     [(mtSub? env) (error 'lookup "x symbol is not in the env")]
-    [(aSub? env) (if (equal? (aSub-name env) name) 
+    [(aSub? env) (if (symbol=? (aSub-name env) name) 
                      (aSub-value env)
                      (lookup name (aSub-env env)))]))
 
 (define (creaEnv params args env closureEnv)
-  (cond
-   [(empty? args) closureEnv]
-   [else (creaEnv (cdr params)
-                  (cdr args)
-                  env
-                  (aSub (car params)
-                        (interp (car args) env)
-                        closureEnv))]))
+  (if (empty? args)
+      closureEnv
+      (creaEnv (cdr params)
+               (cdr args)
+               env
+               (aSub (car params)
+                     (interp (car args) env)
+                     closureEnv))))
 ;;Ejercicio 4 interp
 ;;Ejercicio 2 multi-param Adecuar el interp para que sea multiparametrico.
 (define (interp expr env)
@@ -68,7 +69,7 @@
                                      args 
                                      env 
                                      (closureV-env fun-val))))]
-  [binop (f l r) (numV (f (numV-n (interp l env)) (numV-n (interp r env))))]))
+  [binop (f l r) (opbin f l r env)]))
 
 (define (rinterp expr)
   (interp expr (mtSub)))
