@@ -11,15 +11,22 @@
     [numS (n) (num n)]
     [withS (l b) (app (fun (map (lambda (x) (bind-name x)) l)
                                      (desugar b))
-                                (list (desugar (bind-val (car l)))))]
-    [with*S (l b) (app (fun (map (lambda (x) (bind-name x)) l)
-                                     (desugar b))
                                 (map (lambda (x) (desugar (bind-val x))) l))]
+    [with*S (l b) (withsmulti l b)]
     [funS (p b) (fun p (desugar b))]
     [appS (f a) (app (desugar f) (map desugar a))]
     [binopS (o l r) (binop o 
                            (desugar l)
                            (desugar r))]))
+
+;;Ejercicio 3 with*
+(define (withsmulti bindings body)
+  (cond
+    [(if (empty? bindings)
+         (desugar body)
+         (app (fun (list (bind-name (car bindings)))
+                    (withsmulti (cdr bindings) body)) 
+               (list (desugar (bind-val (car bindings))))))]))
 
 
 (test (desugar (parse '{+ 3 4})) (binop + (num 3) (num 4)))
@@ -29,23 +36,39 @@
 (define (cparse sexp)
   (desugar (parse sexp)))
 
-;;Ejercicio 2 multi-param Adecuar el interp para que sea multiparametrico.
-
-;;Ejercicio 3 with*
-
 (define (opbin op l r)
   (cond
     [(numV (op (numV-n l) (numV-n r)))]))
 (define (lookup name env)
-  (env name))
+  (cond
+    [(mtSub? env) (error 'lookup "x symbol is not in the env")]
+    [(aSub? env) (if (equal? (aSub-name env) name) 
+                     (aSub-value env)
+                     (lookup name (aSub-env env)))]))
+
+(define (creaEnv params args env closureEnv)
+  (cond
+   [(empty? args) closureEnv]
+   [else (creaEnv (cdr params)
+                  (cdr args)
+                  env
+                  (aSub (car params)
+                        (interp (car args) env)
+                        closureEnv))]))
 ;;Ejercicio 4 interp
+;;Ejercicio 2 multi-param Adecuar el interp para que sea multiparametrico.
 (define (interp expr env)
   (type-case FAE expr
   [num (n) (numV n)]
   [id (name) (lookup name env)]
   [fun (params body) (closureV params body env)]
-  [app (fun args) '()]
-  [binop (f l r) (opbin f (rinterp l) (rinterp r))]))
+  [app (fun args) (local([define fun-val (interp fun env)])
+                    (interp (closureV-body fun-val)
+                            (creaEnv (closureV-param fun-val) 
+                                     args 
+                                     env 
+                                     (closureV-env fun-val))))]
+  [binop (f l r) (numV (f (numV-n (interp l env)) (numV-n (interp r env))))]))
 
 (define (rinterp expr)
   (interp expr (mtSub)))
@@ -72,3 +95,4 @@
 (test (rinterp (cparse '{with* {{x 3} {y {+ 2 x}} {x 10} {z {+ x y}}} z})) (numV 15))
 (test/exn (rinterp (cparse '{with {{x 10} {x 20}} x})) "El id x está repetido")
 (test (rinterp (cparse '{with* {{x 10} {x 20}} x})) (numV 20))
+(test/exn (rinterp (cparse '{{fun {x y} y} 3 {+ 2 x}})) "x symbol is not in the env")
