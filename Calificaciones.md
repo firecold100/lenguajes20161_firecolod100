@@ -23,6 +23,10 @@ hicieron eso en las funciones de recorrido de los arboles BTree.
 
 **Calificación: 10**
 
+### Practica 4
+
+Muy bien.
+**Calificación: 10**
 
 ## Tareas
 
