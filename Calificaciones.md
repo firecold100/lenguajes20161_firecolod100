@@ -26,6 +26,19 @@ hicieron eso en las funciones de recorrido de los arboles BTree.
 
 ## Tareas
 
+### Tarea 1
+
+Problema I: Hay que especificar que la complejidad O(1) solo cuando
+no hay colisiones en el Hash, lo cual no sucede en el peor caso en general
+pero dado que el dominio es muy especifico es factible hacer un
+función hash casi perfecta.
+
+Problema II: Bien.
+
+Problema III: Muy bien.
+
+**Calificación: 10**
+
 ### Tarea 2
 
 No entregaron nada :(.
