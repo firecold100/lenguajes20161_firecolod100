@@ -59,10 +59,10 @@
 
 (define-type MLista
   [MEmpty]
-  [MCons (mcar RCFAEL?) (mcdr RCFAEL?)])
+  [MCons (mcar RCFAEL?) (mcdr MLista?)])
 (define-type MListaS
   (MEmptyS)
-  (MConsS [mcar RCFAELS?] [mcdr RCFAELS?]))
+  (MConsS [mcar RCFAELS?] [mcdr MListaS?]))
 
 ;Definición de RCFAEL-Value, parse, desugar o interp
 (define-type RCFAEL-Value
@@ -80,14 +80,7 @@
   [mtSub]
   [aSub (name symbol?) 
         (value RCFAEL-Value?) 
-        (env Env?)]
-  [aRecSub (name symbol?)
-           (value boxed-RCFAEL-Value?)
-           (env Env?)])
-
-(define (boxed-RCFAEL-Value? v)
-  (and (box? v)
-       (RCFAEL-Value? (unbox v))))
+        (env Env?)])
 
 ; FUNCIONES AUXILIARES
 
@@ -184,7 +177,7 @@
        [(rec) (recS (caadr sexp)
                     (parse (cadadr sexp))
                     (parse (caddr sexp)))]
-       [(MList) (if (MEmpty? (cdr sexp))
-                    (MEmptyS)
-                    (parse (cdr sexp)))]
+       [(MList) (MListS (parse (cadr sexp)))]
+       [(MCons) (MConsS (parse (cadr sexp)) (parse (caddr sexp))) ];;falta corregir que lea bien las listas de la entrada...
+       [(MEmpty) (MEmptyS)]
        [else (appS (parse (car sexp)) (map parse (cdr sexp)))])]))

@@ -32,7 +32,7 @@
 (define (desugarMlist l)
   (cond
     [(MEmptyS? l) (MEmpty)]
-    [(MConsS? l) (MCons (desugar (MConsS-mcar l)) (desugarMlist (MConsS-mcdr l)))]
+    [(MCons? (desugar (MConsS-mcar l)) (desugarMlist (MConsS-mcdr l)))]
     [else "error"]))
 
 
@@ -54,13 +54,7 @@
 
 (define (opbin op l r env)
   (cond
-    [(and (numV? l) (numV? r)) (let ((res (op (numV-n l)
-                                              (numV-n r))))
-                                     (if (boolean? res)
-                                         (boolV res)
-                                         (numV res)))]
-    [(and (boolV? l) (boolV? r)) (boolV (op (boolV-b l)
-                                               (boolV-b r)))]))
+    [(numV (op (numV-n (interp l env)) (numV-n (interp r env))))]))
 
 (define (lookup name env)
   (cond
@@ -78,7 +72,8 @@
                (aSub (car params)
                      (interp (car args) env)
                      closureEnv))))
-
+;;Ejercicio 4 interp
+;;Ejercicio 2 multi-param Adecuar el interp para que sea multiparametrico.
 (define (interp expr env)
   (type-case RCFAEL expr
     [num (n) (numV n)]
@@ -91,48 +86,18 @@
                                      args 
                                      env 
                                      (closureV-env fun-val))))]
-    [binop (f l r) (opbin f (interp l env) (interp r env) env)]
-    [unop (op arg) (opun op (interp arg env))]
+    [binop (f l r) (opbin f l r env)]
+    [unop (op arg) ((eligeUn op) (interp arg env))]
     [ifR (test truth falsity)
          (if (boolV-b (interp test env))
              (interp truth env)
              (interp falsity env))]
-    [equal?R (fir sec) (eq (interp fir env) 
-                           (interp sec env))]
+    [equal?R (prim seg) (error 'interp "no implementado")]
     [rec (bound-id named-expr bound-body) (error 'interp "no implementado")] 
-    [MList (l) (MListV (Mlistinterp l env))]))
+    [MList (l) (error 'interp "no implementado")]))
 
 (define (rinterp expr)
   (interp expr (mtSub)))
-
-(define (Mlistinterp l env)
-  (cond
-    [(MEmpty? l) (MEmptyV)]
-    [(MCons? l) (MConsV (interp (MCons-mcar l) env) 
-                        (Mlistinterp (MCons-mcdr l) env))]))
-
-(define (eq prim seg)
-  (cond
-    [(and (numV? prim) (numV? seg)) (boolV (equal? (numV-n prim) (numV-n seg)))]
-    [(and (boolV? prim) (boolV? seg)) (boolV (equal? (boolV-b prim) (boolV-b seg)))]
-    [(and (MListV? prim) (MListV? seg)) (boolV (eqMLista (MListV-l prim) (MListV-l seg)))]
-    [else (error 'eq "No esta definido")]))
-
-(define (eqMLista l1 l2)
-  (cond
-    [(or (MEmptyV? l1) (MEmptyV? l2)) (equal? l1 l2) ]
-    [else (and (equal? (MConsV-mcar l1) (MConsV-mcar l2)) (eqMLista (MConsV-mcdr l1) (MConsV-mcdr l2)))]))
-
-(define (opun f arg)
-  (cond
-    [(numV? arg) (let ((resultado (f (numV-n arg))))
-                   (if (boolean? resultado)
-                       (boolV resultado)
-                       (numV resultado)))]
-    [(boolV? arg) (let ((resultado (f (boolV-b arg))))
-                   (if (boolean? resultado)
-                       (boolV resultado)
-                       (numV resultado)))]))
 
 (test (rinterp (cparse '3)) (numV 3))
 (test (rinterp (cparse '{+ 3 4})) (numV 7))
@@ -160,19 +125,35 @@
 
 (test (rinterp (cparse 'true)) (boolV true))
 (test (rinterp (cparse 'false)) (boolV false))
-(test (rinterp (cparse '{MList (MEmpty)})) (MListV (MEmptyV)))
-(test (rinterp (cparse '{MList {MCons {+ 2 3} {MCons {+ 5 10} {MEmpty}}}})) (MListV (MConsV (numV 5) (MConsV (numV 15) (MEmptyV)))))
-(test (rinterp (cparse '{MList {MCons {or true false} {MEmpty}}})) (MListV (MConsV (boolV #t) (MEmptyV))))
-(test (rinterp (cparse '{MList {MCons {with* {{x 10} {x 20}} x} {MEmpty}}})) (MListV (MConsV (numV 20) (MEmptyV))))
-(test (rinterp (cparse '{if {> 13 7} 
-                            15 
-                            8})) (numV 15))
-(test (rinterp (cparse '{with {{n 13}} 
-                              {if {and {> n 7} {< n 15}}
-                                  42 
-                                  false}})) (numV 42))
-(test (rinterp (cparse '{equal? 5 5})) (boolV #t))
-(test (rinterp (cparse '{neg false})) (boolV #t))
-(test (rinterp (cparse '{inc 4})) (numV 5))
-(test (rinterp (cparse '(bool? false))) (boolV #t))
-(test (rinterp (cparse '(and true true))) (boolV true))
+(test (rinterp (cparse '{MList {MEmpty}})) (MListV (MEmptyV)))
+(test (rinterp '{MList {MCons {+ 2 3} {MCons {+ 5 10} {MEmpty}}}}) (MListV (MConsV (numV 5) (MConsV (numV 15) (MEmptyV)))))
+(test (rinterp '{MList {MCons {or true false} {MEmpty}}}) (MListV (MConsV (boolV #t) (MEmptyV))))
+(test (rinterp '{MList {MCons {with* {{x 10} {x 20}} x} {MEmpty}}}) (MListV (MConsV (numV 20) (MEmptyV))))
+(test (rinterp '{MList {MCons {if {> 13 7} 15 8} {MCons (rec (fac (fun (n)
+                               (if (zero? n)
+                                   1
+                                   (* n (fac (dec n)))))) (fac 5)) {MCons {{fun {x} x} 3} {MEmpty}}}}}) (MListV (MConsV (numV 15) (MConsV (numV 120) (MConsV (numV 3) (MEmptyV))))))
+;;If
+(test (rinterp '(if (> 13 7) 15 8)) (numV 15))
+(test (rinterp '(with ((n 13)) (if (and (> n 7) (< n 15)) 42 8))) (numV 42))
+(test (rinterp '(with ((n 0)) (if (and (> n 7) (< n 15)) 42 8))) (numV 8))
+;;Equal
+;(test (interpEqual? (numV 5) (numV 5)) (boolV #t))
+;(test (interpEqual? (boolV #t) (boolV #f)) (boolV #f))
+;(test (interpEqual? (MListV (MEmptyV)) (MListV (MEmptyV))) (boolV #t))
+;(test (interpEqual? (MListV (MConsV (numV 10) (MEmptyV))) (MListV (MEmptyV))) (boolV #f))
+;(test/exn (interpEqual? (numV 4) (MListV (MEmptyV))) "La aplicacion de equal? no es adecuada")
+;;Op
+(test (rinterp '(neg true)) (boolV #f))
+(test (rinterp '(inc 7)) (numV 8))
+(test (rinterp '(dec 14)) (numV 13))
+(test (rinterp '(neg true)) (boolV #f))
+(test (rinterp '(bool? false)) (boolV #t))
+;;Binop
+(test (rinterp '(and (< 7 13) (> 15 8))) (boolV true))
+(test (rinterp '(or (< 13 7) (> 15 8))) (boolV true))
+;; Recursion con cajas
+(test (rinterp '(rec (fac (fun (n)
+                               (if (zero? n)
+                                   1
+                                   (* n (fac (dec n)))))) (fac 5))) (numV 120))
