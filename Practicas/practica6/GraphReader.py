@@ -31,6 +31,7 @@ def readJSON():
 def readXML():
 	doc = minidom.parse("graph.xml")
 	vertexs = doc.getElementsByTagName("vertex")
+	lis = []
 	for vertex in vertexs:
-		sid = vertex.getAttribute("label")
-		print("label:%s " %(sid))
+		lis.append(vertex.getAttribute("label"))	
+		
