@@ -4,14 +4,15 @@ class Vertex(object):
 		self.etiqueta = etiqueta
 		self.vecinos = vecinos
 
-	def get_grado(self):
-		return self.grado
+	def incrementar_grado(self):
+		self.grado += 1
 
-	def setVecino(self, vertice):
+	def add_vecino(self, vertice):
 		self.vecinos.append(vertice)
+		self.grado += 1
 
 	def __str__(self):
 		objeto = "id: "+ str(self.etiqueta) + ", grado: "+ str(self.grado) + ", vecinos: ["
-		mvecinos = ','.join([("("+str(vecino.etiqueta)+")") for vecino in self.vecinos])
+		mvecinos = ','.join([("("+str(vecino)+")") for vecino in self.vecinos])
 		objeto += mvecinos + "]"
 		return objeto
