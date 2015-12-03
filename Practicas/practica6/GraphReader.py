@@ -15,13 +15,13 @@ def readCSV():
 	origen = []
 	destino = []
 	for row in enumerate(reader):
-		print('Orgien: ' +row[1][0]+', Destino: '+row[1][1]+', Peso: '+row[1][2])
+		print('Orgien: ' +row[1][0]+', Destino: '+row[1][1][2::3]+', Peso: '+row[1][2][1::])
 		origen.append(row[1][0]) 		
-		destino.append(row[1][1])
-		pesos.append(row[1][2])
-	print(origen[0])
-	print(destino[0])
-	print(pesos[0])
+		destino.append(row[1][1][2::3])
+		pesos.append(row[1][2][1::])
+	print(origen)
+	print(destino)
+	print(pesos)
 
 def readJSON():
 	with open('graph.json',encoding='utf-8') as data_file:
