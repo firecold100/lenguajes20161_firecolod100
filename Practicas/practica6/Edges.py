@@ -1,24 +1,19 @@
 from Vertex import *
 
 class Edges(object):
-
 	def __init__(self, origen, destino, peso):		
 		self.origen = origen
 		self.destino = destino
 		self.peso = peso
 	
-	def svertex():
-		print('Origen')
+	def svertex(self):
+		return self.origen
 
-	def tvertex():
-		print('destino')
+	def tvertex(self):
+		return self.destino
 
-	def wight():
-		print('peso')
+	def weight(self):
+		return self.peso
 
 	def __str__(self):
-<<<<<<< HEAD
-		return "origen: (%s), destino: (%s), peso: %s" % (str(self.origen), str(self.destino), str(self.peso))
-=======
-		return "origen: (%s), destino: (%s), peso: %s" % (str(self.origen), str(self.destino), str(self.peso))
->>>>>>> f52fca6ec84db1b2d2b0462416810b4709c63116
+		return "origen: (%s), destino: (%s), peso: %s" % (str(self.origen), str(self.destino), str(self.peso))		

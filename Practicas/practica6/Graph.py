@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 from Vertex import *
 from Edges import *
 
@@ -25,12 +23,15 @@ class Graph:
 	def add_arista(self, arista):
 		self.aristas.append(arista)
 
+#Metodo solicitado
 	def directed(self):
 		return self.dirigida
 
+#Metodo solicitado
 	def vertices(self):
 		return self.listvertices
 
+#Metodo solicitado
 	def edges(self):
 		return self.aristas
 
@@ -39,4 +40,3 @@ class Graph:
 		for vertice in self.listvertices:
 			etiquetas.append(vertice.etiqueta)
 		return etiquetas
->>>>>>> f52fca6ec84db1b2d2b0462416810b4709c63116

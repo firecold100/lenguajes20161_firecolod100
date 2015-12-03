@@ -3,9 +3,12 @@ class Vertex(object):
 		self.grado = grado
 		self.etiqueta = etiqueta
 		self.vecinos = vecinos
-
-	def incrementar_grado(self):
-		self.grado += 1
+#Metodo solicitado
+	def degree(self):
+		return self.grado
+#Metodo solicitado
+	def neighbours(self):
+		return self.vecinos
 
 	def add_vecino(self, vertice):
 		self.vecinos.append(vertice)
