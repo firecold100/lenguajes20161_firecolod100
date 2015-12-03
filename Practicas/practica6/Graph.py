@@ -11,12 +11,6 @@ class Graph:
 	def set_dirigida(self, dirigida):
 		self.dirigida = dirigida
 
-	def set_vertices(self, vertices):
-		self.vertices = listvertices
-
-	def set_aristas(self, aristas):
-		self.aristas = aristas
-
 	def add_vertice(self, vertice):
 		self.listvertices.append(vertice)
 

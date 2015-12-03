@@ -38,9 +38,16 @@ def readCSV():
 	return graph
 
 def readJSON():
+	graph = Graph()	
 	with open('graph.json',encoding='utf-8') as data_file:
 		data =  json.loads(data_file.read())
-	print(data)
+	if data['direct']==1:
+		graph.set_dirigida(True)
+		for vertice in data['vertices']:
+			graph.add_vertice(Vertex(vertice,0,[]))
+		for arista in data['edges']:			
+			graph.add_arista(Edges(arista[0],arista[1],arista[2]))
+	return graph
 
 def readXML():
 	doc = minidom.parse("graph.xml")
@@ -48,4 +55,3 @@ def readXML():
 	lis = []
 	for vertex in vertexs:
 		lis.append(vertex.getAttribute("label"))	
-		
