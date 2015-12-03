@@ -34,7 +34,7 @@ def readCSV():
 				for vertice in graph.vertices():
 					if vertice.etiqueta == row[1][1][2::3]:
 						vertice.add_vecino(row[1][0])
-		graph.add_arista(Edges(row[1][0],row[1][1][2::3],row[1][2][1::]))
+			graph.add_arista(Edges(row[1][0],row[1][1][2::3],row[1][2][1::]))
 	return graph
 
 def readJSON():
