@@ -1,8 +1,8 @@
-#!/usr/bin/env python
 
 import csv
 import json   
 from xml.dom import minidom
+
 
 def readCSV():
 	reader = csv.reader(open('graph.csv', 'r'))
