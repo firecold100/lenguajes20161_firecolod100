@@ -1,16 +1,35 @@
 #!/usr/bin/env python
 
-import csv
-import json   
+import csv, json
+from Graph import *
+from Vertex import *
+from Edges import *
 from xml.dom import minidom
 
 def readCSV():
+	graph = Graph()
 	reader = csv.reader(open('graph.csv', 'r'))
 	tipo= next(reader, None)	
 	if tipo ==['direct=1']:
 		print('Dirigida')
+		graph.set_dirigida(True)
 	else:
 		print('No dirigida')
+		for row in enumerate(reader):
+			if row[1][0] not in graph.get_etiquetas():
+				graph.add_vertice(Vertex(row[1][0], 1, [row[1][1][2::3]]))
+			else:
+				for vertice in graph.vertices():
+					if vertice.etiqueta == row[1][0]:
+						vertice.add_vecino(row[1][1][2::3])
+			if row[1][1][2::3] not in graph.get_etiquetas():
+				graph.add_vertice(Vertex(row[1][1][2::3], 1, [row[1][0]]))
+			else:
+				for vertice in graph.vertices():
+					if vertice.etiqueta == row[1][1][2::3]:
+						vertice.add_vecino(row[1][0])
+		for vertice in graph.vertices():
+		 	print(vertice)
 	pesos = []
 	origen = []
 	destino = []
