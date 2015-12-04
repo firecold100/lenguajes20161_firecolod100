@@ -1,4 +1,3 @@
-
 import csv, json
 from Graph import *
 from Vertex import *
@@ -47,6 +46,12 @@ def readJSON():
 			graph.add_vertice(Vertex(vertice,0,[]))
 		for arista in data['edges']:			
 			graph.add_arista(Edges(arista[0],arista[1],arista[2]))
+			for vertice in graph.vertices():
+				if vertice.etiqueta == arista[0]:
+					vertice.add_vecino(arista[1])
+	for v in graph.vertices():
+		print(v)
+		print(v.vecinos)
 	return graph
 
 def readXML():
