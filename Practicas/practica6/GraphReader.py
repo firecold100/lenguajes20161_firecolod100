@@ -1,13 +1,13 @@
-import csv, json
+import csv, json, os
 from Graph import *
 from Vertex import *
 from Edges import *
 from xml.dom import minidom
 
 
-def readCSV():
+def readCSV(archivo):
 	graph = Graph()
-	reader = csv.reader(open('graph.csv', 'r'))
+	reader = csv.reader(open(os.getcwd()+"/ejemplos/"+archivo, 'r'))
 	tipo= next(reader, None)	
 	if tipo ==['direct=1']:		
 		graph.set_dirigida(True)		
@@ -27,9 +27,9 @@ def readCSV():
 		graph.add_arista(Edges(row[1][0],row[1][1][2::3],row[1][2][1::]))	
 	return graph
 
-def readJSON():
+def readJSON(archivo):
 	graph = Graph()	
-	with open('graph.json',encoding='utf-8') as data_file:
+	with open(os.getcwd()+"/ejemplos/"+archivo,encoding='utf-8') as data_file:
 		data =  json.loads(data_file.read())
 	if data['direct']==1:
 		graph.set_dirigida(True)
@@ -45,9 +45,9 @@ def readJSON():
 						vertex.add_vecino(arista[0])	
 	return graph
 
-def readXML():
+def readXML(archivo):
 	graph=Graph()
-	doc = minidom.parse("graph.xml")	
+	doc = minidom.parse(os.getcwd()+"/ejemplos/"+archivo)	
 	vertexs = doc.getElementsByTagName("vertex")
 	edges = doc.getElementsByTagName("edge")
 	grafo = doc.getElementsByTagName("graph")		
@@ -67,3 +67,20 @@ def readXML():
 					if vertex.etiqueta == edge.getAttribute("target"):
 						vertex.add_vecino(edge.getAttribute("source"))
 	return graph
+
+def showFiles():
+	lfiles = os.listdir(os.getcwd()+"/ejemplos")
+	graphs = []
+	for element in lfiles:
+		if element.find(".csv") != -1:
+			graphs.append((element, readCSV(element)))
+		elif element.find(".json") != -1:
+			graphs.append((element, readJSON(element)))
+		elif element.find(".xml") != -1:
+			graphs.append((element, readXML(element)))
+	for graph in graphs:
+		print(graph[0])
+		print("Dirigida: "+ str(graph[1].directed()))
+		print("Vertices: "+ str(graph[1].get_etiquetas()))
+		print("Aristas: "+ str(graph[1].edges()))
+		print("\n ")
