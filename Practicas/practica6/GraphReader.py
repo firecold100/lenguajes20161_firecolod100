@@ -13,7 +13,7 @@ def readCSV():
 		graph.set_dirigida(True)
 		for row in enumerate(reader):
 			if row[1][0] not in graph.get_etiquetas():
-				graph.add_vertice(Vertex(row[1][0], 0, [row[1][1][2::3]]))
+				graph.add_vertice(Vertex(row[1][0], 1, [row[1][1][2::3]]))
 			else:
 				for vertice in graph.vertices():
 					if vertice.etiqueta == row[1][0]:
@@ -42,13 +42,16 @@ def readJSON():
 		data =  json.loads(data_file.read())
 	if data['direct']==1:
 		graph.set_dirigida(True)
-		for vertice in data['vertices']:
-			graph.add_vertice(Vertex(vertice,0,[]))
-		for arista in data['edges']:			
-			graph.add_arista(Edges(arista[0],arista[1],arista[2]))
-			for vertice in graph.vertices():
-				if vertice.etiqueta == arista[0]:
-					vertice.add_vecino(arista[1])
+	for vertice in data['vertices']:
+		graph.add_vertice(Vertex(vertice,0,[]))
+	for arista in data['edges']:
+		graph.add_arista(Edges(arista[0],arista[1],arista[2]))
+		for vertice in graph.vertices():
+			if vertice.etiqueta == arista[0]:
+				vertice.add_vecino(arista[1])
+				for vertex in graph.vertices():
+					if vertex.etiqueta == arista[1]:
+						vertex.add_vecino(arista[0])
 	for v in graph.vertices():
 		print(v)
 		print(v.vecinos)
