@@ -1,4 +1,4 @@
-direct=1
+direct=0
 "a", "b", 11
 "b", "c", 1
 "c", "d", 4
