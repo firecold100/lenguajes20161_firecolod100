@@ -34,3 +34,8 @@ class Graph:
 		for vertice in self.listvertices:
 			etiquetas.append(vertice.etiqueta)
 		return etiquetas
+
+	def incr_grado(self, etiqueta):
+		for vertice in self.listvertices:
+			if vertice.etiqueta == etiqueta:
+				vertice.incr_grado()

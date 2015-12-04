@@ -42,6 +42,7 @@ def readJSON():
 		data =  json.loads(data_file.read())
 	if data['direct']==1:
 		graph.set_dirigida(True)
+<<<<<<< HEAD
 		for vertice in data['vertices']:
 			graph.add_vertice(Vertex(vertice,1,[]))
 		for arista in data['edges']:			
@@ -49,6 +50,21 @@ def readJSON():
 			for vertice in graph.vertices():
 				if vertice.etiqueta == arista[0]:
 					vertice.add_vecino(arista[1])	
+=======
+	for vertice in data['vertices']:
+		graph.add_vertice(Vertex(vertice,0,[]))
+	for arista in data['edges']:
+		graph.add_arista(Edges(arista[0],arista[1],arista[2]))
+		for vertice in graph.vertices():
+			if vertice.etiqueta == arista[0]:
+				vertice.add_vecino(arista[1])
+				for vertex in graph.vertices():
+					if vertex.etiqueta == arista[1]:
+						vertex.add_vecino(arista[0])
+	for v in graph.vertices():
+		print(v)
+		print(v.vecinos)
+>>>>>>> b25f7f8dfa23d92933fa40fb4a2aa6af48a2ef33
 	return graph
 
 def readXML():
