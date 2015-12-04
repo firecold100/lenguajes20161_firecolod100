@@ -52,7 +52,10 @@ def readXML():
 	graph=Graph()
 	doc = minidom.parse("graph.xml")	
 	vertexs = doc.getElementsByTagName("vertex")
-	edges = doc.getElementsByTagName("edge")			
+	edges = doc.getElementsByTagName("edge")
+	grafo = doc.getElementsByTagName("graph")		
+	d=grafo.getAttribute("direct")
+	print(d)
 	for vertex in vertexs:
 		graph.add_vertice(Vertex(vertex.getAttribute("label"),0,[]))		
 	for edge in edges:
