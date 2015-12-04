@@ -15,4 +15,7 @@ class Vertex(object):
 		self.grado += 1
 
 	def __repr__(self):
-		return "%s"	% (self.etiqueta)
+		objeto = "id: "+ str(self.etiqueta) + ", grado: "+ str(self.grado) + ", vecinos: ["
+		mvecinos = ','.join([("("+str(vecino)+")") for vecino in self.vecinos])
+		objeto += mvecinos + "]"
+		return objeto
