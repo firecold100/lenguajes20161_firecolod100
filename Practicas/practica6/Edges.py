@@ -15,5 +15,5 @@ class Edges(object):
 	def weight(self):
 		return self.peso
 
-	def __str__(self):
-		return "origen: (%s), destino: (%s), peso: %s" % (str(self.origen), str(self.destino), str(self.peso))		
+	def __repr__(self):
+		return "(%s,%s,%s)" % (self.origen , self.destino, self.peso)

@@ -14,8 +14,8 @@ class Vertex(object):
 		self.vecinos.append(vertice)
 		self.grado += 1
 
-	def __str__(self):
+	def __repr__(self):
 		objeto = "id: "+ str(self.etiqueta) + ", grado: "+ str(self.grado) + ", vecinos: ["
 		mvecinos = ','.join([("("+str(vecino)+")") for vecino in self.vecinos])
 		objeto += mvecinos + "]"
-		return objeto
+		return objeto	

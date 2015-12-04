@@ -47,7 +47,6 @@ def readJSON():
 			graph.add_vertice(Vertex(vertice,0,[]))
 		for arista in data['edges']:			
 			graph.add_arista(Edges(arista[0],arista[1],arista[2]))
-
 	return graph
 
 def readXML():
