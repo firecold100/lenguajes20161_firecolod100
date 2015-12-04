@@ -49,8 +49,18 @@ def readJSON():
 	return graph
 
 def readXML():
-	doc = minidom.parse("graph.xml")
+	graph=Graph()
+	doc = minidom.parse("graph.xml")	
 	vertexs = doc.getElementsByTagName("vertex")
-	lis = []
+	edges = doc.getElementsByTagName("edge")			
 	for vertex in vertexs:
-		lis.append(vertex.getAttribute("label"))	
+		graph.add_vertice(Vertex(vertex.getAttribute("label"),0,[]))		
+	for edge in edges:
+		graph.add_arista(Edges(edge.getAttribute("source"),edge.getAttribute("target"),edge.getAttribute("weight")))
+		for vertice in graph.vertices():
+			if vertice.etiqueta == edge.getAttribute("source"):
+				vertice.add_vecino(edge.getAttribute("target"))
+				for vertex in graph.vertices():
+					if vertex.etiqueta == edge.getAttribute("target"):
+						vertex.add_vecino(edge.getAttribute("source"))
+	return graph
