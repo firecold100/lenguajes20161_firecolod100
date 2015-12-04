@@ -62,25 +62,31 @@ class Graph:
 				break
 		return found_cycle[0]
 
+	#Este metodo visita lo vecinos en una grafica es dirigida
 	def dfs_visit2(self, G, u, found_cycle, pred_node, marked):
+		#si ya encontro un ciclo
 		if found_cycle[0]:
 			return
-		marked[u] = True
-		for v in G:
+		marked[u] = True #marca al vecino
+		for v in G: #para cada vecino
+			#si ya esta marcado y viene de otro que no estaba marcado
 			if marked[v] and v != pred_node:
 				found_cycle[0] = True
 				return
-			if not marked[v]:
+			if not marked[v]: #si no estaba marcado lo marca y vuelve a marcar a sus vecinos
 				self.dfs_visit2(self.get_out(v), v, found_cycle, u, marked)
 
-	def cycle_exists2(self):
+	def cycle_exists2(self): #Este metodo se debe regrsar si la grafica es dirigida
+		#para facilitar el acceso a los nodos (hash) y saber si ya fue visitado o no
 		marked = { v.etiqueta : False for v in self.listvertices }
+		#para ver si ya encontro un ciclo, como es la inicializacion es false
 		found_cycle = [False]
 
-		for v in self.listvertices:
-			if not marked[v.etiqueta]:
+		for v in self.listvertices: #a cada vertice
+			if not marked[v.etiqueta]: #si no esta marcado
+				#aqui llamamos al metodo que visita a los vecinos
 				self.dfs_visit2(self.get_out(v.etiqueta), v.etiqueta, found_cycle, v.etiqueta, marked)
-			if found_cycle[0]:
+			if found_cycle[0]: #si ya encontro un ciclo rompe
 				break
 		return found_cycle[0]
 
