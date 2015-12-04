@@ -54,8 +54,11 @@ def readXML():
 	vertexs = doc.getElementsByTagName("vertex")
 	edges = doc.getElementsByTagName("edge")
 	grafo = doc.getElementsByTagName("graph")		
-	d=grafo.getAttribute("direct")
-	print(d)
+	lis=[]
+	for g in grafo:
+		lis.append(g.getAttribute("direct"))		
+		if lis[0] == '1':
+			graph.set_dirigida(True)
 	for vertex in vertexs:
 		graph.add_vertice(Vertex(vertex.getAttribute("label"),0,[]))		
 	for edge in edges:
