@@ -42,10 +42,7 @@ def readJSON():
 				vertice.add_vecino(arista[1])
 				for vertex in graph.vertices():
 					if vertex.etiqueta == arista[1]:
-						vertex.add_vecino(arista[0])
-	#for v in graph.vertices():
-	#	print(v)
-	#	print(v.vecinos)
+						vertex.add_vecino(arista[0])	
 	return graph
 
 def readXML():
