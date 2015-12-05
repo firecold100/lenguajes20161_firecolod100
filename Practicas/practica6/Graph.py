@@ -29,6 +29,16 @@ class Graph:
 	def edges(self):
 		return self.aristas
 
+#Metodo solicitado 
+	def has_cycles(self):		
+		if self.directed() == True:
+			if self.cycle_exists2() == True: 
+				return True
+			else:
+				return False			
+		else: 
+			return True
+
 	def get_etiquetas(self):
 		etiquetas = []
 		for vertice in self.listvertices:

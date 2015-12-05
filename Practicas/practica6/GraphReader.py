@@ -81,10 +81,7 @@ def showFiles():
 	for graph in graphs:
 		print(graph[0])
 		print("Dirigida: "+ str(graph[1].directed()))
-		print("Vertices: "+ str(graph[1].get_etiquetas()))
+		print("Vertices: "+ str(graph[1].vertices()))
 		print("Aristas: "+ str(graph[1].edges()))
-		if graph[1].directed():
-			print(str(graph[1].cycle_exists2()))
-		else:
-			print(str(graph[1].cycle_exists()))
+		print("Ciclos: "+ str(graph[1].has_cycles()))
 		print("\n ")
