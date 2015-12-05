@@ -68,7 +68,7 @@ def readXML(archivo):
 						vertex.add_vecino(edge.getAttribute("source"))
 	return graph
 
-def showFiles():
+def main():
 	lfiles = os.listdir(os.getcwd()+"/ejemplos")
 	graphs = []
 	for element in lfiles:
@@ -85,3 +85,6 @@ def showFiles():
 		print("Aristas: "+ str(graph[1].edges()))
 		print("Ciclos: "+ str(graph[1].has_cycles()))
 		print("\n ")
+
+if __name__ == '__main__':
+	main()
