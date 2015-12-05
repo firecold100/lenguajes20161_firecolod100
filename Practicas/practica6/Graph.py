@@ -40,12 +40,7 @@ class Graph:
 		etiquetas = []
 		for vertice in self.listvertices:
 			etiquetas.append(vertice.etiqueta)
-		return etiquetas
-
-	def incr_grado(self, etiqueta):
-		for vertice in self.listvertices:
-			if vertice.etiqueta == etiqueta:
-				vertice.incr_grado()
+		return etiquetas	
 
 	def dfs_visit(self, G, u, found_cycle, pred_node, marked):
 		if found_cycle[0]:
