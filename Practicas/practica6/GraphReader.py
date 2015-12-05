@@ -79,11 +79,11 @@ def main():
 		elif element.find(".xml") != -1:
 			graphs.append((element, readXML(element)))
 	for graph in graphs:
-		print(graph[0])
+		print("Archivo: "+ graph[0])
 		print("Dirigida: "+ str(graph[1].directed()))
 		print("Vertices: "+ str(graph[1].vertices()))
 		print("Aristas: "+ str(graph[1].edges()))
-		print("Ciclos: "+ str(graph[1].has_cycles()))
+		print("Tiene Ciclos: "+ str(graph[1].has_cycles()))
 		print("\n ")
 
 if __name__ == '__main__':

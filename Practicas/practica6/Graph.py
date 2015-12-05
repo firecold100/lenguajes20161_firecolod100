@@ -32,15 +32,9 @@ class Graph:
 #Metodo solicitado 
 	def has_cycles(self):		
 		if self.directed() == True:
-			if self.cycle_exists2() == True: 
-				return True
-			else:
-				return False			
+			return self.cycle_exists2()	
 		else: 
-			if self.cycle_exists() == True: 
-				return True
-			else:
-				return False						
+			return self.cycle_exists()
 
 	def get_etiquetas(self):
 		etiquetas = []
@@ -58,11 +52,13 @@ class Graph:
 			return
 		marked[u] = True
 		for v in G:
-			if marked[v.etiqueta] and v.etiqueta != pred_node:
+			if marked[v] and v != pred_node:
 				found_cycle[0] = True
 				return
-			if not marked[v.etiqueta]:
-				self.dfs_visit(G, v, found_cycle, u, marked)
+			if not marked[v]:
+				for vertice in self.listvertices:
+					if vertice.etiqueta == v:
+						self.dfs_visit(vertice.neighbours(), v, found_cycle, u, marked)
 
 	def cycle_exists(self):
 		marked = { v.etiqueta : False for v in self.listvertices }
@@ -70,7 +66,7 @@ class Graph:
 
 		for v in self.listvertices:
 			if not marked[v.etiqueta]:
-				self.dfs_visit(self.listvertices, v.etiqueta, found_cycle, v.etiqueta, marked)
+				self.dfs_visit(v.neighbours(), v.etiqueta, found_cycle, v.etiqueta, marked)
 			if found_cycle[0]:
 				break
 		return found_cycle[0]
@@ -103,7 +99,7 @@ class Graph:
 				break
 		return found_cycle[0]
 
-	def get_out(self, vertice):
+	def get_out(self, vertice): #Metodo que regresa los vecinos de salida del vertice parametro
 		outs = []
 		for a in self.aristas:
 			if a.origen == vertice:
