@@ -37,7 +37,10 @@ class Graph:
 			else:
 				return False			
 		else: 
-			return True
+			if self.cycle_exists() == True: 
+				return True
+			else:
+				return False						
 
 	def get_etiquetas(self):
 		etiquetas = []
