@@ -48,3 +48,15 @@ Problema III: Muy bien.
 No entregaron nada :(.
 
 **Calificación: 0**
+
+### Tarea 3
+
+Problema I: Hay detalles sobre lo que cargan en
+gamma.
+Problema II: Muy bien.
+Problema III: Sus restricciones son incorrectas, y los tipos derivados tambien son incorrectas.
+Problema IV: Su justificación no es clara.
+Problema V: Bien
+Problema VI: Les faltaron ejemplos y la desventaja puesta para lenguajes generales es totalmente erronea.
+
+**Calificación: 7**
