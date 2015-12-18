@@ -28,6 +28,19 @@ hicieron eso en las funciones de recorrido de los arboles BTree.
 Muy bien.
 **Calificación: 10**
 
+### Practica 5
+
+No hicieron la parte de rec ni por cajas ni por
+procedimientos.
+**Calificación: 5**
+
+### Practica 6
+
+Todo bien pero no usaron herencia y polimorfismo
+en ninguna parte.
+
+**Calificación: 8.5**
+
 ## Tareas
 
 ### Tarea 1
